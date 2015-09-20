@@ -1,0 +1,1 @@
+--gui --rats 100 --pipers 8 --side 100 --fps 100 --groups g0 g1 g1 g1  --recompile
