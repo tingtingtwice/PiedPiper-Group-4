@@ -8,7 +8,7 @@ public class Utils {
 		// TODO Auto-generated constructor stub
 	}
 	// Euclidean distance between two points
-	private static double distance(Point p1, Point p2)
+	public static double distance(Point p1, Point p2)
 	{
 		double dx = p1.x - p2.x;
 		double dy = p1.y - p2.y;

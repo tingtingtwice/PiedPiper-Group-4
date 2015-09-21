@@ -63,12 +63,14 @@ public class Player implements pppp.sim.Player {
 			boolean swap = id == 1 || id == 3;
 			Point before_gate = point(door, side * 0.5 * .85, neg_y, swap);
 			Point inside_gate = point(door, side * 0.5 * 1.2, neg_y, swap);// first and third position is at the door
-			double distance = side / 3;
+			double distance = side/2;
 			double theta = Math.toRadians(p * 90.0 / (n_pipers - 1) + 45);
 
-			pos[p][0] = point(door, side * 0.5, neg_y, swap);
+			// pos[p][0] = point(door, side * 0.5, neg_y, swap);
+            pos[p][0] = point(door, side * 0.5, neg_y, swap);
 
-			pos[p][1] = point(distance * Math.cos(theta), distance + -1 * distance * Math.sin(theta), neg_y, swap);
+			pos[p][1] = point(distance * Math.cos(theta), distance + (-1) * distance * Math.sin(theta), neg_y, swap);
+            // pos[p][1] = point(distance * Math.cos(theta), distance * Math.sin(theta), neg_y, swap);
 
 			pos[p][2] = before_gate;
 			pos[p][3] = inside_gate;
@@ -90,20 +92,22 @@ public class Player implements pppp.sim.Player {
         /*
          Returns a Cell[] array of length = number of cells = side/20 * side/20
          */
-        int cell_side = 0;
-        if (side % 20 == 0)
-            cell_side = side/20;
+
+        int cell_side = 5;
+        int dim = 0;
+        if (side % cell_side == 0)
+            dim = side/cell_side;
         float half = side/2;
-        Cell[] grid = new Cell[cell_side*cell_side];
+        Cell[] grid = new Cell[dim*dim];
         
-        for(int i=0; i < cell_side; i++) {
-            for(int j=0; j < cell_side; j++) {
+        for(int i=0; i < dim; i++) {
+            for(int j=0; j < dim; j++) {
                 Cell cell = new Cell(
                                      new Point(  // X, Y - center
-                                               (i + 0.5) * 20 - half,
-                                               (j + 0.5) * 20 - half
+                                               (i + 0.5) * cell_side - half,
+                                               (j + 0.5) * cell_side - half
                                                ));
-                grid[(i * cell_side) + j] = cell;
+                grid[(i * dim) + j] = cell;
             }
         }
         
@@ -292,6 +296,14 @@ public class Player implements pppp.sim.Player {
         
     }
 
+        // Yields the number of rats within range
+    static int num_captured_rats(Point piper, Point[] rats) {
+        int num = 0;
+        for (Point rat : rats)
+            num += Utils.distance(piper, rat) <= 10 ? 1 : 0;
+        return num;
+    }
+
 	// return next locations on last argument
 	public void play(Point[][] pipers, boolean[][] pipers_played,
 					 Point[] rats, Move[] moves) {
@@ -339,10 +351,20 @@ public class Player implements pppp.sim.Player {
                         random_pos[p] = dst = piper_to_cell.get(id);
                     }
                 }
+                if (pos_index[p] == 6 && num_captured_rats(pipers[id][p], rats) == 0)
+                    pos_index[p] = 5;
+                if ((pos_index[p] == 3 || pos_index[p] == 7) && num_captured_rats(pipers[id][p], rats) == 0)
+                    pos_index[p] = 4;
 
-                // if (pos_index[p] == 5) {
-                //     dst = piper_to_cell.get(id);
-                // }
+                if (pos_index[p] == 5 ) {
+                    update_grid_weights(rats);
+            
+                    // sort the cells in the Cell[] grid in descending order of weight/number_of_rats
+                    // Arrays.sort(this.grid, Collections.reverseOrder());
+                    // piper_to_cell = get_piper_to_cell(pipers[id].length);
+                    random_pos[p] = dst = piper_to_cell.get(id);
+                }
+
                 // get move towards position
                 moves[p] = move(src, dst, (pos_index[p] > 1 && pos_index[p] < 4) || (pos_index[p] > 5));
             }
