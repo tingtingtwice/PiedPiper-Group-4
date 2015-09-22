@@ -51,7 +51,6 @@ public class Player implements pppp.sim.Player {
 		random_pos = new Point[n_pipers];
 		pos_index = new int[n_pipers];
 
-
 		completed_sweep = new Boolean[n_pipers];
 		Arrays.fill(completed_sweep, Boolean.FALSE);
 
@@ -86,6 +85,7 @@ public class Player implements pppp.sim.Player {
 			// fourth and fifth positions are outside the rat moving area
 			pos[p][6] = before_gate;
 			pos[p][7] = inside_gate;
+
 			// start with first position
 			pos_index[p] = 0;
 			dst_no = 0;
@@ -93,11 +93,11 @@ public class Player implements pppp.sim.Player {
 	}
 
     public Cell[] create_grid(int side) {
-        /*
-         Returns a Cell[] array of length = number of cells = side/20 * side/20
-         */
+    /*
+     Returns a Cell[] array of length = number of cells = side/20 * side/20
+     */
 
-        int cell_side = 5;
+        int cell_side = 1;
         int dim = 0;
         if (side % cell_side == 0)
             dim = side/cell_side;
@@ -122,7 +122,6 @@ public class Player implements pppp.sim.Player {
     public void display_grid() {
         for (int i=0; i < this.grid.length; i++) {
             this.grid[i].display_cell();
-//            System.out.println();
         }
     }
     
@@ -145,12 +144,8 @@ public class Player implements pppp.sim.Player {
         for (int i=0; i < this.grid.length; i++) {
             this.grid[i].weight = 0;
         }
-        
         for (Point rat: rats) {
-//            System.out.println("Rat is at: " + rat.x + ", " + rat.y);
             Cell cell = find_cell(rat);
-//            System.out.println("Rat found at: " + cell.center.x + ", " + cell.center.y);
-
             if (cell != null)
                 cell.weight++;
         }
@@ -158,21 +153,8 @@ public class Player implements pppp.sim.Player {
     
     public Map<Integer, Point> get_piper_to_cell(int remaining_pipers) {
         Cell[] grid_copy = Arrays.copyOf(grid, grid.length);
-        for (int j=0; j < grid.length; j++) {
-            // System.out.println(grid[j].weight + " " + grid_copy[j].weight);
-        }
-        // new Cell[grid.length];
-        // for (int j=0; j<grid.length; j++) {
-        // 	grid_copy[j] = grid[j];
-        // }
-        
         Map<Integer, Point> piper_to_cell = new HashMap<Integer, Point>();
         List<Integer> all_pipers = new ArrayList<Integer>();
-        
-        for (int i=0; i<remaining_pipers; i++) {
-            all_pipers.add(i);
-        }
-        
         int i;
         int cells_to_consider;
         int sum;
@@ -181,6 +163,11 @@ public class Player implements pppp.sim.Player {
         int piper;
         List<Cell> non_zero_cells = new ArrayList<Cell>();
         Iterator<Cell> iter_list;
+        Iterator<Integer> iter;
+
+        for (i=0; i<remaining_pipers; i++) {
+            all_pipers.add(i);
+        }
 
         for (int k=0; k < grid_copy.length; k++) {
             non_zero_cells.add(grid_copy[k]);
@@ -188,74 +175,37 @@ public class Player implements pppp.sim.Player {
         
         cells_to_consider = remaining_pipers;
         while (remaining_pipers > 0) {
-
-            // cells_to_consider = remaining_pipers;
-
             int prev_length = non_zero_cells.size();
             if (prev_length > cells_to_consider) {
-                // System.out.println("$$$$$$$$$$$$$$$$$$$$$$$"+prev_length);
-                // for (int k = cells_to_consider; k < prev_length; k++) {
-                //     System.out.println("k: "+ k);
-                //     non_zero_cells.remove(k);
-                //     non_zero_cells.trimToSize();
-                // }
                 non_zero_cells = non_zero_cells.subList(0, cells_to_consider);
-            }
-            
+            }      
             sum = 0;
 
-
-//            System.out.println("1 Remaining: " + remaining_pipers);
-//            System.out.println("1 Cells to consider: " + cells_to_consider);
-//            System.out.println("1 Non zero cells: " + non_zero_cells.size());
-            for (int k=0; k<non_zero_cells.size(); k++) {
-                System.out.println(non_zero_cells.get(k).weight);
-            }
-            
             iter_list = non_zero_cells.iterator();
             for (i=0; i<cells_to_consider; i++) {
-                // System.out.println("Computing avg...");
-                // if (grid_copy[i].weight != 0) {
-                //     non_zero_cells.append(grid_copy[i])
-                //     sum += grid_copy[i].weight;
-
-                // }
                 Cell next_item = iter_list.next();
-                 if (next_item.weight != 0) {
+                 if (next_item.weight != 0)
                     sum += next_item.weight;
-                }
                 else
-                {
-//                    System.out.println("Before: " + non_zero_cells.size());
                     iter_list.remove();
-//                    System.out.println("After: " + non_zero_cells.size());
-                }
             }
             cells_to_consider = non_zero_cells.size();
             if (cells_to_consider == 0)
                 break;
-//            System.out.println("2 Remaining: " + remaining_pipers);
-//            System.out.println("2 Cells to consider: " + cells_to_consider);
-
             avg = sum/cells_to_consider;
-            // if (avg < 1) avg = 1;
-//            System.out.println("Avg: " + avg);
-            
+
             i = 0;
             iter_list = non_zero_cells.iterator();
             Cell this_cell;
             while(i < cells_to_consider) {
-                // System.out.println("i: " + i);
                 if (iter_list.hasNext())
                     this_cell = iter_list.next();
                 else 
                     break;
                 
-                // n_p_to_i = grid_copy[i].weight/avg;
                 n_p_to_i = this_cell.weight/avg;
-//                System.out.println("n p i: " + n_p_to_i);
                 
-                Iterator<Integer> iter = all_pipers.iterator();
+                iter = all_pipers.iterator();
                 for (int j=0; j<n_p_to_i; j++) {
                     if (iter.hasNext())
                     {
@@ -266,41 +216,28 @@ public class Player implements pppp.sim.Player {
                     }
                 }
                 this_cell.weight = this_cell.weight % avg;
-                if (this_cell.weight == 0){
-//                    System.out.println("Before: " + non_zero_cells.size());
+                if (this_cell.weight == 0)
                     iter_list.remove();
-//                    System.out.println("After: " + non_zero_cells.size());
-                }
                 cells_to_consider = non_zero_cells.size();
                 if (cells_to_consider == 0)
                     break;
                 i++;
-                
             }
-            
         }
 
         while (remaining_pipers > 0) {
-            Iterator<Integer> iter = all_pipers.iterator();
+            iter = all_pipers.iterator();
             if (iter.hasNext()) {
                     piper = iter.next();
                     piper_to_cell.put(piper, grid_copy[0].center);
                     iter.remove();
                     remaining_pipers -= 1;
             }
-        }
-                
-        // for (Map.Entry<Integer, Point> entry : piper_to_cell.entrySet()) {
-        //     int key = entry.getKey();
-        //     Point value = entry.getValue();
-        //     System.out.println(key + " " + value.x + " " + value.y);
-        // }
-        
-        return piper_to_cell;
-        
+        }     
+        return piper_to_cell; 
     }
 
-        // Yields the number of rats within range
+    // Yields the number of rats within range
     static int num_captured_rats(Point piper, Point[] rats) {
         int num = 0;
         for (Point rat : rats)
@@ -310,15 +247,10 @@ public class Player implements pppp.sim.Player {
 
     static boolean isSparse(double ratsLength, double side) {
         double density = ratsLength / (side * side);
-//        System.out.print("Density and rat length : "+density + ratsLength);
-        if (density <= density_threshold) {
-//            System.out.print("Density Sparse");
+        if (density <= density_threshold) 
             return true;
-        }else{
-//            System.out.print("Density DENSE");
+        else 
             return false;
-        }
-
     }
 
 	// return next locations on last argument
@@ -335,7 +267,6 @@ public class Player implements pppp.sim.Player {
             for (Map.Entry<Integer, Point> entry : piper_to_cell.entrySet()) {
                 int key = entry.getKey();
                 Point value = entry.getValue();
-//                System.out.println(key + " " + value.x + " " + value.y);
             }
 
             //p : is the index of piper for current player
@@ -346,7 +277,6 @@ public class Player implements pppp.sim.Player {
                 if ((sparse_flag || ((!sparse_flag) && completed_sweep[p])) && (pos_index[p] == 1 ))
                 {
                     pos_index[p] = 4;
-                    //				dst = null; // call new destination function here
                 }
                 // if null then get random position
                 if (dst == null) dst = random_pos[p];
@@ -363,8 +293,6 @@ public class Player implements pppp.sim.Player {
                     dst = pos[p][pos_index[p]];
                     // generate a new position if random
                     if (dst == null || pos_index[p] == 5) {
-                        //					double x = (gen.nextDouble() - 0.5) * side * 0.9;
-                        //					double y = (gen.nextDouble() - 0.5) * side * 0.9;
                         random_pos[p] = dst = piper_to_cell.get(id);
                     }
                 }
@@ -372,13 +300,7 @@ public class Player implements pppp.sim.Player {
                     pos_index[p] = 5;
                 if ((pos_index[p] == 3 || pos_index[p] == 7) && num_captured_rats(pipers[id][p], rats) == 0)
                     pos_index[p] = 4;
-
                 if (pos_index[p] == 5 ) {
-                    update_grid_weights(rats);
-            
-                    // sort the cells in the Cell[] grid in descending order of weight/number_of_rats
-                    // Arrays.sort(this.grid, Collections.reverseOrder());
-                    // piper_to_cell = get_piper_to_cell(pipers[id].length);
                     random_pos[p] = dst = piper_to_cell.get(id);
                 }
 
