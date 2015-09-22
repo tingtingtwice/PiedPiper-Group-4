@@ -45,30 +45,49 @@ public class Player implements pppp.sim.Player {
 	}
 
 
-    double getSweepRadius(Point[] rats, Point[] boundaries){
+
+    double getSweepRadius(Point[] rats, Point[] boundaries, int id){
         double radius = side/3;
         int sum_strip1 = 0;
         int sum_strip2 = 0;
-        int sum_remain = 0;
-        double avg;
-        for(Point rat: rats) {
-            if ((boundaries[1].y < rat.y && rat.y <= boundaries[0].y) || (boundaries[1].y >= rat.y && rat.y > boundaries[0].y) || (boundaries[1].x < rat.x && rat.x <= boundaries[0].x) || (boundaries[1].x >= rat.x && rat.x > boundaries[0].x)){
-               sum_remain += 1;
-            } else if ((boundaries[2].y < rat.y && rat.y <= boundaries[1].y) || (boundaries[2].y >= rat.y && rat.y > boundaries[1].y)||(boundaries[2].x < rat.x && rat.x <= boundaries[1].x) || (boundaries[2].x >= rat.x && rat.x > boundaries[1].x)){
-                sum_strip2 += 1;
-            } else {
-                sum_strip1 += 1;
-            }
-        }
+        int sum_rem = 0;
+        double avg = 0.0;
 
+        for(Point rat: rats)
+        {
+            if (id == 0 || id == 2)
+            {
+                //Only consider y axis boundaries
+                if ((rat.y >= Math.min(boundaries[0].y, boundaries[1].y)) && ((rat.y < Math.max(boundaries[0].y, boundaries[1].y))))
+                    {sum_strip1 += 1;}
+                else if ((rat.y >= Math.min(boundaries[1].y, boundaries[2].y)) && ((rat.y < Math.max(boundaries[1].y, boundaries[2].y))))
+                    {sum_strip2 += 1;}
+                else
+                    {sum_rem += 1;}               
+            }
+            else if (id == 1 || id == 3)
+            {
+                // id = 1 or 3 | Considering X-axis only
+                if ((rat.x > Math.min(boundaries[0].x, boundaries[1].x)) && ((rat.x < Math.max(boundaries[0].x, boundaries[1].x))))
+                    {sum_strip1 += 1;}  
+                else if ((rat.x > Math.min(boundaries[1].x, boundaries[2].x)) && ((rat.x < Math.max(boundaries[1].x, boundaries[2].x))))
+                    {sum_strip2 += 1;}
+                else
+                    {sum_rem += 1;  }     
+            } 
+        }
         avg = (sum_strip1 + sum_strip2)/2;
         if (sum_strip2 > avg )
-            radius = side/2;
-        else if (sum_strip1 >= 1.2*avg) 
+        {
+            radius = side/2.5;
+        }
+        else if (sum_strip1 >= 1.2*avg) {
             radius = side/4;
-
+        }
+        System.out.println("Total rats : "+rats.length+ " | strip 1 : "+ sum_strip1 + " | strip 2 : "+ sum_strip2 + " | remaining "+ sum_rem + " | RADIUS : "+radius);
         return radius;
     }
+
 
 	// specify location that the player will alternate between
 	public void init(int id, int side, long turns,
@@ -110,7 +129,7 @@ public class Player implements pppp.sim.Player {
             boundaries[0] = point(side * 0.5 * 1, side * 0.5 * 1, neg_y, swap); // At the door
             boundaries[1] = point(side * 0.5 * 0.5, side * 0.5 * 0.5, neg_y, swap); // Between door and center
             boundaries[2] = point(0, 0, neg_y, swap); // At the center of the grid
-            double distance = getSweepRadius(rats, boundaries);
+            double distance = getSweepRadius(rats, boundaries, id);
 			double theta = Math.toRadians(p * 90.0 / (n_pipers - 1) + 45);
             pos[p][0] = point(door, side * 0.5, neg_y, swap);
 			pos[p][1] = point(distance * Math.cos(theta), (side/2) + (-1) * distance * Math.sin(theta), neg_y, swap);
