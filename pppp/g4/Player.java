@@ -304,6 +304,16 @@ public class Player implements pppp.sim.Player {
         return num;
     }
 
+    static boolean isSparse(int ratsLength, int side) {
+        double density = ratsLength / (side * side);
+        if (density <= 0.001) {
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
 	// return next locations on last argument
 	public void play(Point[][] pipers, boolean[][] pipers_played,
 					 Point[] rats, Move[] moves) {
@@ -326,7 +336,7 @@ public class Player implements pppp.sim.Player {
                 Point src = pipers[id][p];
                 Point dst = pos[p][pos_index[p]];
                 
-                if (completed_sweep[p] && pos_index[p] == 1)
+                if ((isSparse(rats.length, side)  || completed_sweep[p]) && pos_index[p] == 1 )
                 {
                     pos_index[p] = 4;
                     //				dst = null; // call new destination function here
