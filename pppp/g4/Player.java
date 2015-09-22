@@ -41,6 +41,34 @@ public class Player implements pppp.sim.Player {
 		return swap_xy ? new Point(y, x) : new Point(x, y);
 	}
 
+
+    double getSweepRadius(Point[] rats, Point[] boundaries){
+        double radius = side/3;
+        int sum_strip1 = 0;
+        int sum_strip2 = 0;
+        double avg = 0.0;
+        for(Point rat: rats)
+        {
+            if ( rat.y < boundaries[2].y){
+                continue;
+            } else if (rat.y >= boundaries[1].y && rat.y < boundaries[0].y) {
+                sum_strip1 += 1;
+            } else {
+                sum_strip2 += 1;
+            }
+        }
+        avg = (sum_strip1 + sum_strip2)/2;
+        if (sum_strip2 > avg )
+        {
+            radius = side/2;
+        }
+        else if (sum_strip1 >= 1.2*avg) {
+            radius = side/4;
+        }
+        System.out.println("Total rats : "+rats.length+ " | strip 1 : "+ sum_strip1 + " | strip 2 : "+ sum_strip2 + " | RADIUS : "+radius);
+        return radius;
+    }
+
 	// specify location that the player will alternate between
 	public void init(int id, int side, long turns,
 					 Point[][] pipers, Point[] rats) {
@@ -66,10 +94,13 @@ public class Player implements pppp.sim.Player {
 			boolean swap = id == 1 || id == 3;
 			Point before_gate = point(door, side * 0.5 * .85, neg_y, swap);
 			Point inside_gate = point(door, side * 0.5 * 1.2, neg_y, swap);// first and third position is at the door
-			double distance = side/3;
+            Point[] boundaries = new Point[3];
+            boundaries[0] = point(0, side * 0.5 * 1, neg_y, swap); // At the door
+            boundaries[1] = point(0, side * 0.5 * 0.5, neg_y, swap); // Between door and center
+            boundaries[2] = point(0, 0, neg_y, swap); // At the center of the grid
+            // System.out.println("Boundaries : 0 : "+boundaries[0].y + " | 1 : "+boundaries[1].y + " | 2: "+boundaries[2].y);
+            double distance = getSweepRadius(rats, boundaries);
 			double theta = Math.toRadians(p * 90.0 / (n_pipers - 1) + 45);
-
-			// pos[p][0] = point(door, side * 0.5, neg_y, swap);
             pos[p][0] = point(door, side * 0.5, neg_y, swap);
 
 			pos[p][1] = point(distance * Math.cos(theta), (side/2) + (-1) * distance * Math.sin(theta), neg_y, swap);
