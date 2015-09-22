@@ -64,13 +64,13 @@ public class Player implements pppp.sim.Player {
 			boolean swap = id == 1 || id == 3;
 			Point before_gate = point(door, side * 0.5 * .85, neg_y, swap);
 			Point inside_gate = point(door, side * 0.5 * 1.2, neg_y, swap);// first and third position is at the door
-			double distance = side/2;
+			double distance = side/3;
 			double theta = Math.toRadians(p * 90.0 / (n_pipers - 1) + 45);
 
 			// pos[p][0] = point(door, side * 0.5, neg_y, swap);
             pos[p][0] = point(door, side * 0.5, neg_y, swap);
 
-			pos[p][1] = point(distance * Math.cos(theta), distance + (-1) * distance * Math.sin(theta), neg_y, swap);
+			pos[p][1] = point(distance * Math.cos(theta), (side/2) + (-1) * distance * Math.sin(theta), neg_y, swap);
             // pos[p][1] = point(distance * Math.cos(theta), distance * Math.sin(theta), neg_y, swap);
 
 			pos[p][2] = before_gate;
