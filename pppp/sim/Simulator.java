@@ -1,8 +1,10 @@
 package pppp.sim;
 
+import java.awt.Desktop;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
 import javax.tools.*;
 
 class Simulator {
@@ -445,12 +447,17 @@ class Simulator {
 	}
 
 	// play game
-	private static void play(boolean gui) throws IOException
+	private static void play(boolean gui) throws IOException, URISyntaxException
 	{
 		HTTPServer server = null;
 		if (gui) {
 			server = new HTTPServer();
 			System.err.println("HTTP port: " + server.port());
+			 // Create Desktop object
+			 Desktop d=Desktop.getDesktop();
+
+			 // Browse a URL, say google.com
+			 d.browse(new URI("http://localhost:"+server.port()));
 		}
 		int version = 0;
 		for (long turn = 0 ;; ++turn) {

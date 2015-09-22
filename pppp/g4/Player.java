@@ -51,16 +51,25 @@ public class Player implements pppp.sim.Player {
         double radius = side/3;
         int sum_strip1 = 0;
         int sum_strip2 = 0;
-        double avg = 0.0;
+        int sum_remain = 0;
+        double avg;
         for(Point rat: rats)
         {
-            if ( rat.y < boundaries[2].y){
-                continue;
-            } else if (rat.y >= boundaries[1].y && rat.y < boundaries[0].y) {
-                sum_strip1 += 1;
-            } else {
-                sum_strip2 += 1;
-            }
+//            if ( rat.y < boundaries[2].y){
+//                continue;
+//            } else if (rat.y >= boundaries[1].y && rat.y < boundaries[0].y) {
+//                sum_strip1 += 1;
+//            } else {
+//                sum_strip2 += 1;
+//            }
+            if ((boundaries[1].y < rat.y && rat.y <= boundaries[0].y) || (boundaries[1].y >= rat.y && rat.y > boundaries[0].y) || (boundaries[1].x < rat.x && rat.x <= boundaries[0].x) || (boundaries[1].x >= rat.x && rat.x > boundaries[0].x)){
+           sum_remain += 1;
+        } else if ((boundaries[2].y < rat.y && rat.y <= boundaries[1].y) || (boundaries[2].y >= rat.y && rat.y > boundaries[1].y)||(boundaries[2].x < rat.x && rat.x <= boundaries[1].x) || (boundaries[2].x >= rat.x && rat.x > boundaries[1].x)){
+            sum_strip2 += 1;
+        } else {
+            sum_strip1 += 1;
+        }
+
         }
         avg = (sum_strip1 + sum_strip2)/2;
         if (sum_strip2 > avg )
@@ -70,7 +79,7 @@ public class Player implements pppp.sim.Player {
         else if (sum_strip1 >= 1.2*avg) {
             radius = side/4;
         }
-        System.out.println("Total rats : "+rats.length+ " | strip 1 : "+ sum_strip1 + " | strip 2 : "+ sum_strip2 + " | RADIUS : "+radius);
+        System.out.println("Total rats : "+rats.length+ " | strip 1 : "+ sum_strip1 + " | strip 2 : "+ sum_strip2 +" | strip remain : "+ sum_remain + " | RADIUS : "+radius);
         return radius;
     }
 
@@ -114,10 +123,10 @@ public class Player implements pppp.sim.Player {
 			Point before_gate = point(door, side * 0.5 * .85, neg_y, swap);
 			Point inside_gate = point(door, side * 0.5 * 1.2, neg_y, swap);// first and third position is at the door
             Point[] boundaries = new Point[3];
-            boundaries[0] = point(0, side * 0.5 * 1, neg_y, swap); // At the door
-            boundaries[1] = point(0, side * 0.5 * 0.5, neg_y, swap); // Between door and center
+            boundaries[0] = point(side * 0.5 * 1, side * 0.5 * 1, neg_y, swap); // At the door
+            boundaries[1] = point(side * 0.5 * 0.5, side * 0.5 * 0.5, neg_y, swap); // Between door and center
             boundaries[2] = point(0, 0, neg_y, swap); // At the center of the grid
-            // System.out.println("Boundaries : 0 : "+boundaries[0].y + " | 1 : "+boundaries[1].y + " | 2: "+boundaries[2].y);
+            System.out.println("Boundaries : 0 : "+boundaries[0].x+boundaries[0].y + " | 1 : "+boundaries[1].x+boundaries[1].y + " | 2: "+boundaries[2].x+boundaries[2].y);
             double distance = getSweepRadius(rats, boundaries);
 			double theta = Math.toRadians(p * 90.0 / (n_pipers - 1) + 45);
             pos[p][0] = point(door, side * 0.5, neg_y, swap);
@@ -388,12 +397,7 @@ public class Player implements pppp.sim.Player {
                     random_pos[p] = dst = piper_to_cell.get(p);
                 }
 
-                    // System.out.println("Piper's position index is: " + pos_index[p]);
-                    // System.out.println("Piper " + p + "is moving to (" + dst.x + ", " + dst.y + ")");
-                    // System.out.println("Rat is at " + rats[0].x + ", " + rats[0].y);
-                    // Cell last_rat = find_cell(rats[0]);
-                    // System.out.println("Rat found in cell " + last_rat.id + " centered at " + last_rat.center.x + ", " + last_rat.center.y);
-                    // System.out.println();
+
                 
 
                 // get move towards position
