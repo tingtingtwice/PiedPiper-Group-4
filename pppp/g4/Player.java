@@ -24,8 +24,6 @@ public class Player implements pppp.sim.Player {
     int tick = 0;
     Point our_gate = null;
 
-    Point[] init_rand = null;
-
 	// create move towards specified destination
 	private static Move move(Point src, Point dst, boolean play) {
 		double dx = dst.x - src.x;
@@ -53,33 +51,22 @@ public class Player implements pppp.sim.Player {
         int sum_strip2 = 0;
         int sum_remain = 0;
         double avg;
-        for(Point rat: rats)
-        {
-//            if ( rat.y < boundaries[2].y){
-//                continue;
-//            } else if (rat.y >= boundaries[1].y && rat.y < boundaries[0].y) {
-//                sum_strip1 += 1;
-//            } else {
-//                sum_strip2 += 1;
-//            }
+        for(Point rat: rats) {
             if ((boundaries[1].y < rat.y && rat.y <= boundaries[0].y) || (boundaries[1].y >= rat.y && rat.y > boundaries[0].y) || (boundaries[1].x < rat.x && rat.x <= boundaries[0].x) || (boundaries[1].x >= rat.x && rat.x > boundaries[0].x)){
-           sum_remain += 1;
-        } else if ((boundaries[2].y < rat.y && rat.y <= boundaries[1].y) || (boundaries[2].y >= rat.y && rat.y > boundaries[1].y)||(boundaries[2].x < rat.x && rat.x <= boundaries[1].x) || (boundaries[2].x >= rat.x && rat.x > boundaries[1].x)){
-            sum_strip2 += 1;
-        } else {
-            sum_strip1 += 1;
+               sum_remain += 1;
+            } else if ((boundaries[2].y < rat.y && rat.y <= boundaries[1].y) || (boundaries[2].y >= rat.y && rat.y > boundaries[1].y)||(boundaries[2].x < rat.x && rat.x <= boundaries[1].x) || (boundaries[2].x >= rat.x && rat.x > boundaries[1].x)){
+                sum_strip2 += 1;
+            } else {
+                sum_strip1 += 1;
+            }
         }
 
-        }
         avg = (sum_strip1 + sum_strip2)/2;
         if (sum_strip2 > avg )
-        {
             radius = side/2;
-        }
-        else if (sum_strip1 >= 1.2*avg) {
+        else if (sum_strip1 >= 1.2*avg) 
             radius = side/4;
-        }
-        System.out.println("Total rats : "+rats.length+ " | strip 1 : "+ sum_strip1 + " | strip 2 : "+ sum_strip2 +" | strip remain : "+ sum_remain + " | RADIUS : "+radius);
+
         return radius;
     }
 
@@ -91,14 +78,11 @@ public class Player implements pppp.sim.Player {
 		int n_pipers = pipers[id].length;
 		pos = new Point[n_pipers][8];
 		random_pos = new Point[n_pipers];
-
 		pos_index = new int[n_pipers];
-
 		completed_sweep = new Boolean[n_pipers];
 		Arrays.fill(completed_sweep, Boolean.FALSE);
 
         this.grid = create_grid(this.side, rats.length);
-        
         boolean neg_y = id == 2 || id == 3;
         boolean swap = id == 1 || id == 3;
         our_gate = point(0, side * 0.5 * 1, neg_y, swap);
@@ -126,22 +110,17 @@ public class Player implements pppp.sim.Player {
             boundaries[0] = point(side * 0.5 * 1, side * 0.5 * 1, neg_y, swap); // At the door
             boundaries[1] = point(side * 0.5 * 0.5, side * 0.5 * 0.5, neg_y, swap); // Between door and center
             boundaries[2] = point(0, 0, neg_y, swap); // At the center of the grid
-            System.out.println("Boundaries : 0 : "+boundaries[0].x+boundaries[0].y + " | 1 : "+boundaries[1].x+boundaries[1].y + " | 2: "+boundaries[2].x+boundaries[2].y);
             double distance = getSweepRadius(rats, boundaries);
 			double theta = Math.toRadians(p * 90.0 / (n_pipers - 1) + 45);
             pos[p][0] = point(door, side * 0.5, neg_y, swap);
-
 			pos[p][1] = point(distance * Math.cos(theta), (side/2) + (-1) * distance * Math.sin(theta), neg_y, swap);
-            // pos[p][1] = point(distance * Math.cos(theta), distance * Math.sin(theta), neg_y, swap);
-
 			pos[p][2] = before_gate;
 			pos[p][3] = inside_gate;
 			pos[p][4] = before_gate;
-
-			// second position is chosen randomly in the rat moving areaons;
+			// sixth position is chosen randomly in the rat moving areaons;
 			pos[p][5] = null;
 
-			// fourth and fifth positions are outside the rat moving area
+			// seventh and eighth positions are outside the rat moving area
 			pos[p][6] = before_gate;
 			pos[p][7] = inside_gate;
 
@@ -155,19 +134,13 @@ public class Player implements pppp.sim.Player {
     /*
      Returns a Cell[] array of length = number of cells = side/20 * side/20
      */
-
-
         int cell_side;
 
         if(isSparse(number_of_rats, side)) {
-            System.out.println("Rats: " + number_of_rats);
-            System.out.println("Sparse");
             cell_side = 5;
         }
         else {
             cell_side = 20;
-            System.out.println("Rats: " + number_of_rats);
-            System.out.println("Dense");
         }
 
         int dim = 0;
@@ -179,11 +152,11 @@ public class Player implements pppp.sim.Player {
         for(int i=0; i < dim; i++) {
             for(int j=0; j < dim; j++) {
                 Cell cell = new Cell(
-                                    cell_side,
-                                     new Point(  // X, Y - center
-                                               (i + 0.5) * cell_side - half,
-                                               (j + 0.5) * cell_side - half
-                                               ));
+                                cell_side,
+                                 new Point(  // X, Y - center
+                                           (i + 0.5) * cell_side - half,
+                                           (j + 0.5) * cell_side - half
+                                           ));
 
                 grid[(i * dim) + j] = cell;
             }
@@ -340,29 +313,21 @@ public class Player implements pppp.sim.Player {
 	public void play(Point[][] pipers, boolean[][] pipers_played,
 					 Point[] rats, Move[] moves) {
         tick++;
-
-
-        
         try {
-            
             if (tick % 50 == 0) {
                 grid = create_grid(side, rats.length);
                 update_grid_weights(rats, pipers, our_gate);
-            
-            // sort the cells in the Cell[] grid in descending order of weight/number_of_rats
+                // sort the cells in the Cell[] grid in descending order of weight/number_of_rats
                 Arrays.sort(this.grid, Collections.reverseOrder());
                 piper_to_cell = get_piper_to_cell(pipers[id].length);
             }
             
-
             //p : is the index of piper for current player
             for (int p = 0; p != pipers[id].length; ++p) {
                 Point src = pipers[id][p];
                 Point dst = pos[p][pos_index[p]];
 
                 if ((sparse_flag || ((!sparse_flag) && completed_sweep[p])) && (pos_index[p] == 1 ))
-                // if (pos_index[p] == 1 )
-
                 {
                     pos_index[p] = 4;
                 }
@@ -389,16 +354,8 @@ public class Player implements pppp.sim.Player {
                 if ((pos_index[p] == 3 || pos_index[p] == 7) && num_captured_rats(pipers[id][p], rats) == 0)
                     pos_index[p] = 4;
                 if (pos_index[p] == 5 ) {
-                    // update_grid_weights(rats);
-                    // // sort the cells in the Cell[] grid in descending order of weight/number_of_rats
-                    // Arrays.sort(this.grid, Collections.reverseOrder());
-                    // piper_to_cell = get_piper_to_cell(pipers[id].length);
-                    
                     random_pos[p] = dst = piper_to_cell.get(p);
                 }
-
-
-                
 
                 // get move towards position
                 moves[p] = move(src, dst, (pos_index[p] > 1 && pos_index[p] < 4) || (pos_index[p] > 5));
