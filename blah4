@@ -1,5 +1,6 @@
-Total rats : 100 | strip 1 : 17 | strip 2 : 29 | remaining 54 | RADIUS : 40.0
-Init: 0.0, 50.0
+Total rats : 100 | strip 1 : 27 | strip 2 : 18 | remaining 55 | RADIUS : 25.0
+Init pos index 0: 0.0, 50.0
+Init pos index 1: NaN, NaN
 0
 src: 0.0, 60.0
 dst: 0.0, 50.0
@@ -63,6 +64,2064 @@ dst: 0.0, 50.0
 0
 src: 0.0, 50.0
 dst: 0.0, 50.0
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
+1
+src: 0.0, 50.0
+dst: NaN, NaN
 1
 src: 0.0, 50.0
 dst: NaN, NaN

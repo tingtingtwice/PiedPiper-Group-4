@@ -132,7 +132,9 @@ public class Player implements pppp.sim.Player {
             double distance = getSweepRadius(rats, boundaries, id);
 			double theta = Math.toRadians(p * 90.0 / (n_pipers - 1) + 45);
             pos[p][0] = point(door, side * 0.5, neg_y, swap);
+            System.out.println("Init pos index 0: " + pos[p][0].x + ", " + pos[p][0].y);
 			pos[p][1] = point(distance * Math.cos(theta), (side/2) + (-1) * distance * Math.sin(theta), neg_y, swap);
+            System.out.println("Init pos index 1: " + pos[p][1].x + ", " + pos[p][1].y);
 			pos[p][2] = before_gate;
 			pos[p][3] = inside_gate;
 			pos[p][4] = before_gate;
@@ -345,7 +347,9 @@ public class Player implements pppp.sim.Player {
             for (int p = 0; p != pipers[id].length; ++p) {
                 System.out.println(pos_index[p] + "");
                 Point src = pipers[id][p];
+                System.out.println("src: " + src.x + ", " + src.y);
                 Point dst = pos[p][pos_index[p]];
+                System.out.println("dst: " + dst.x + ", " + dst.y);
 
                 if ((sparse_flag || ((!sparse_flag) && completed_sweep[p])) && (pos_index[p] == 1 ))
                 {
