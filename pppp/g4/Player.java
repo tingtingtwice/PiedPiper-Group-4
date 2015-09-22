@@ -18,6 +18,7 @@ public class Player implements pppp.sim.Player {
 	private int total_regions = 0;
 	Boolean[] completed_sweep = null;
     private Cell[] grid = null;
+    private static double density_threshold = 0.001;
 
 	// create move towards specified destination
 	private static Move move(Point src, Point dst, boolean play) {
@@ -306,7 +307,7 @@ public class Player implements pppp.sim.Player {
 
     static boolean isSparse(int ratsLength, int side) {
         double density = ratsLength / (side * side);
-        if (density <= 0.001) {
+        if (density <= density_threshold) {
             return true;
         }else{
             return false;
@@ -335,8 +336,9 @@ public class Player implements pppp.sim.Player {
             for (int p = 0; p != pipers[id].length; ++p) {
                 Point src = pipers[id][p];
                 Point dst = pos[p][pos_index[p]];
-                
-                if ((isSparse(rats.length, side)  || completed_sweep[p]) && pos_index[p] == 1 )
+
+                if ((isSparse(rats.length, side) || ((!isSparse(rats.length, side)) && completed_sweep[p])) && (pos_index[p] == 1 ))
+//                if ((isSparse(rats.length, side)  || completed_sweep[p]) && pos_index[p] == 1 )
                 {
                     pos_index[p] = 4;
                     //				dst = null; // call new destination function here
