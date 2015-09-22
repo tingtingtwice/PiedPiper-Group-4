@@ -7,10 +7,11 @@ public class Cell implements Comparable<Cell> {
 	public static int counter = 0;
 	public int id;
 	public Point center = null;
-	public float side = 20;
+	public float side = 1;
 	public int weight = 0;
 
-	public Cell(Point center) {
+	public Cell(float side, Point center) {
+        this.side = side;
 		this.id = counter++;
 		this.center = center;
 	}

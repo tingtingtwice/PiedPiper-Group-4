@@ -20,6 +20,9 @@ public class Player implements pppp.sim.Player {
     private Cell[] grid = null;
     private static double density_threshold = 0.002;
     private Boolean sparse_flag = false;
+    Map<Integer, Point> piper_to_cell = null;
+
+    Point[] init_rand = null;
 
 	// create move towards specified destination
 	private static Move move(Point src, Point dst, boolean play) {
@@ -49,12 +52,30 @@ public class Player implements pppp.sim.Player {
 		int n_pipers = pipers[id].length;
 		pos = new Point[n_pipers][8];
 		random_pos = new Point[n_pipers];
+        init_rand = new Point[n_pipers];
+
 		pos_index = new int[n_pipers];
 
 		completed_sweep = new Boolean[n_pipers];
 		Arrays.fill(completed_sweep, Boolean.FALSE);
 
         this.grid = create_grid(this.side);
+        try {
+            update_grid_weights(rats);
+        // sort the cells in the Cell[] grid in descending order of weight/number_of_rats
+        Arrays.sort(this.grid, Collections.reverseOrder());
+        piper_to_cell = get_piper_to_cell(pipers[id].length);
+        for (int p=0; p<pipers[id].length; p++) {
+            random_pos[p] = piper_to_cell.get(p);
+            init_rand[p] = random_pos[p];
+        }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        
+
         if (isSparse(rats.length, side))
                 sparse_flag = true;
 		for (int p = 0; p != n_pipers; ++p) {
@@ -97,7 +118,8 @@ public class Player implements pppp.sim.Player {
      Returns a Cell[] array of length = number of cells = side/20 * side/20
      */
 
-        int cell_side = 1;
+        int cell_side = 5;
+
         int dim = 0;
         if (side % cell_side == 0)
             dim = side/cell_side;
@@ -107,10 +129,12 @@ public class Player implements pppp.sim.Player {
         for(int i=0; i < dim; i++) {
             for(int j=0; j < dim; j++) {
                 Cell cell = new Cell(
+                                    cell_side,
                                      new Point(  // X, Y - center
                                                (i + 0.5) * cell_side - half,
                                                (j + 0.5) * cell_side - half
                                                ));
+
                 grid[(i * dim) + j] = cell;
             }
         }
@@ -132,7 +156,10 @@ public class Player implements pppp.sim.Player {
             double x2 = cell.center.x + cell.side/2;
             double y1 = cell.center.y + cell.side/2;
             double y2 = cell.center.y - cell.side/2;
-            
+            System.out.println("x1 x2 ratx" + x1 + ", " + x2 + "--->" + rat.x);
+            System.out.println("y1 y2 raty" + y1 + ", " + y2 + "--->" + rat.y);
+
+
             if (rat.x >= x1 && rat.x <= x2 && rat.y >= y2 && rat.y <= y1) {
                 return cell;
             }
@@ -258,16 +285,12 @@ public class Player implements pppp.sim.Player {
 					 Point[] rats, Move[] moves) {
         
         try {
-            Map<Integer, Point> piper_to_cell = null;
+            
             update_grid_weights(rats);
             
             // sort the cells in the Cell[] grid in descending order of weight/number_of_rats
             Arrays.sort(this.grid, Collections.reverseOrder());
             piper_to_cell = get_piper_to_cell(pipers[id].length);
-            for (Map.Entry<Integer, Point> entry : piper_to_cell.entrySet()) {
-                int key = entry.getKey();
-                Point value = entry.getValue();
-            }
 
             //p : is the index of piper for current player
             for (int p = 0; p != pipers[id].length; ++p) {
@@ -293,7 +316,7 @@ public class Player implements pppp.sim.Player {
                     dst = pos[p][pos_index[p]];
                     // generate a new position if random
                     if (dst == null || pos_index[p] == 5) {
-                        random_pos[p] = dst = piper_to_cell.get(id);
+                        random_pos[p] = dst = piper_to_cell.get(p);
                     }
                 }
                 if (pos_index[p] == 6 && num_captured_rats(pipers[id][p], rats) == 0)
@@ -301,8 +324,21 @@ public class Player implements pppp.sim.Player {
                 if ((pos_index[p] == 3 || pos_index[p] == 7) && num_captured_rats(pipers[id][p], rats) == 0)
                     pos_index[p] = 4;
                 if (pos_index[p] == 5 ) {
-                    random_pos[p] = dst = piper_to_cell.get(id);
+                    // update_grid_weights(rats);
+                    // // sort the cells in the Cell[] grid in descending order of weight/number_of_rats
+                    // Arrays.sort(this.grid, Collections.reverseOrder());
+                    // piper_to_cell = get_piper_to_cell(pipers[id].length);
+                    
+                    random_pos[p] = dst = piper_to_cell.get(p);
                 }
+
+                    System.out.println("Piper's position index is: " + pos_index[p]);
+                    System.out.println("Piper " + p + "is moving to (" + dst.x + ", " + dst.y + ")");
+                    System.out.println("Rat is at " + rats[0].x + ", " + rats[0].y);
+                    Cell last_rat = find_cell(rats[0]);
+                    System.out.println("Rat found in cell " + last_rat.id + " centered at " + last_rat.center.x + ", " + last_rat.center.y);
+                    System.out.println();
+                
 
                 // get move towards position
                 moves[p] = move(src, dst, (pos_index[p] > 1 && pos_index[p] < 4) || (pos_index[p] > 5));
