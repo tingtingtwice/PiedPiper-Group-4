@@ -324,6 +324,7 @@ public class Player implements pppp.sim.Player {
             
             //p : is the index of piper for current player
             for (int p = 0; p != pipers[id].length; ++p) {
+                System.out.println(pos_index[p] + "");
                 Point src = pipers[id][p];
                 Point dst = pos[p][pos_index[p]];
 
