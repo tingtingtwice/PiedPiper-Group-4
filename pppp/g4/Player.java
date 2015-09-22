@@ -18,7 +18,8 @@ public class Player implements pppp.sim.Player {
 	private int total_regions = 0;
 	Boolean[] completed_sweep = null;
     private Cell[] grid = null;
-    private static double density_threshold = 0.001;
+    private static double density_threshold = 0.002;
+    private Boolean sparse_flag = false;
 
 	// create move towards specified destination
 	private static Move move(Point src, Point dst, boolean play) {
@@ -50,11 +51,13 @@ public class Player implements pppp.sim.Player {
 		random_pos = new Point[n_pipers];
 		pos_index = new int[n_pipers];
 
+
 		completed_sweep = new Boolean[n_pipers];
 		Arrays.fill(completed_sweep, Boolean.FALSE);
 
         this.grid = create_grid(this.side);
-
+        if (isSparse(rats.length, side))
+                sparse_flag = true;
 		for (int p = 0; p != n_pipers; ++p) {
 			// spread out at the door level
 			double door = 0.0;
@@ -119,7 +122,7 @@ public class Player implements pppp.sim.Player {
     public void display_grid() {
         for (int i=0; i < this.grid.length; i++) {
             this.grid[i].display_cell();
-            System.out.println();
+//            System.out.println();
         }
     }
     
@@ -144,9 +147,9 @@ public class Player implements pppp.sim.Player {
         }
         
         for (Point rat: rats) {
-            System.out.println("Rat is at: " + rat.x + ", " + rat.y);
+//            System.out.println("Rat is at: " + rat.x + ", " + rat.y);
             Cell cell = find_cell(rat);
-            System.out.println("Rat found at: " + cell.center.x + ", " + cell.center.y);
+//            System.out.println("Rat found at: " + cell.center.x + ", " + cell.center.y);
 
             if (cell != null)
                 cell.weight++;
@@ -202,9 +205,9 @@ public class Player implements pppp.sim.Player {
             sum = 0;
 
 
-            System.out.println("1 Remaining: " + remaining_pipers);
-            System.out.println("1 Cells to consider: " + cells_to_consider);
-            System.out.println("1 Non zero cells: " + non_zero_cells.size());
+//            System.out.println("1 Remaining: " + remaining_pipers);
+//            System.out.println("1 Cells to consider: " + cells_to_consider);
+//            System.out.println("1 Non zero cells: " + non_zero_cells.size());
             for (int k=0; k<non_zero_cells.size(); k++) {
                 System.out.println(non_zero_cells.get(k).weight);
             }
@@ -223,20 +226,20 @@ public class Player implements pppp.sim.Player {
                 }
                 else
                 {
-                    System.out.println("Before: " + non_zero_cells.size());
+//                    System.out.println("Before: " + non_zero_cells.size());
                     iter_list.remove();
-                    System.out.println("After: " + non_zero_cells.size());
+//                    System.out.println("After: " + non_zero_cells.size());
                 }
             }
             cells_to_consider = non_zero_cells.size();
             if (cells_to_consider == 0)
                 break;
-            System.out.println("2 Remaining: " + remaining_pipers);
-            System.out.println("2 Cells to consider: " + cells_to_consider);
+//            System.out.println("2 Remaining: " + remaining_pipers);
+//            System.out.println("2 Cells to consider: " + cells_to_consider);
 
             avg = sum/cells_to_consider;
             // if (avg < 1) avg = 1;
-            System.out.println("Avg: " + avg);
+//            System.out.println("Avg: " + avg);
             
             i = 0;
             iter_list = non_zero_cells.iterator();
@@ -250,7 +253,7 @@ public class Player implements pppp.sim.Player {
                 
                 // n_p_to_i = grid_copy[i].weight/avg;
                 n_p_to_i = this_cell.weight/avg;
-                System.out.println("n p i: " + n_p_to_i);
+//                System.out.println("n p i: " + n_p_to_i);
                 
                 Iterator<Integer> iter = all_pipers.iterator();
                 for (int j=0; j<n_p_to_i; j++) {
@@ -264,9 +267,9 @@ public class Player implements pppp.sim.Player {
                 }
                 this_cell.weight = this_cell.weight % avg;
                 if (this_cell.weight == 0){
-                    System.out.println("Before: " + non_zero_cells.size());
+//                    System.out.println("Before: " + non_zero_cells.size());
                     iter_list.remove();
-                    System.out.println("After: " + non_zero_cells.size());
+//                    System.out.println("After: " + non_zero_cells.size());
                 }
                 cells_to_consider = non_zero_cells.size();
                 if (cells_to_consider == 0)
@@ -305,11 +308,14 @@ public class Player implements pppp.sim.Player {
         return num;
     }
 
-    static boolean isSparse(int ratsLength, int side) {
+    static boolean isSparse(double ratsLength, double side) {
         double density = ratsLength / (side * side);
+//        System.out.print("Density and rat length : "+density + ratsLength);
         if (density <= density_threshold) {
+//            System.out.print("Density Sparse");
             return true;
         }else{
+//            System.out.print("Density DENSE");
             return false;
         }
 
@@ -329,7 +335,7 @@ public class Player implements pppp.sim.Player {
             for (Map.Entry<Integer, Point> entry : piper_to_cell.entrySet()) {
                 int key = entry.getKey();
                 Point value = entry.getValue();
-                System.out.println(key + " " + value.x + " " + value.y);
+//                System.out.println(key + " " + value.x + " " + value.y);
             }
 
             //p : is the index of piper for current player
@@ -337,8 +343,7 @@ public class Player implements pppp.sim.Player {
                 Point src = pipers[id][p];
                 Point dst = pos[p][pos_index[p]];
 
-                if ((isSparse(rats.length, side) || ((!isSparse(rats.length, side)) && completed_sweep[p])) && (pos_index[p] == 1 ))
-//                if ((isSparse(rats.length, side)  || completed_sweep[p]) && pos_index[p] == 1 )
+                if ((sparse_flag || ((!sparse_flag) && completed_sweep[p])) && (pos_index[p] == 1 ))
                 {
                     pos_index[p] = 4;
                     //				dst = null; // call new destination function here
