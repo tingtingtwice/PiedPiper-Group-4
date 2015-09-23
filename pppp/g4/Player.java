@@ -349,14 +349,17 @@ public class Player implements pppp.sim.Player {
                 Point src = pipers[id][p];
                 System.out.println("src: " + src.x + ", " + src.y);
                 Point dst = pos[p][pos_index[p]];
-                System.out.println("dst: " + dst.x + ", " + dst.y);
+                
 
                 if ((sparse_flag || ((!sparse_flag) && completed_sweep[p])) && (pos_index[p] == 1 ))
                 {
                     pos_index[p] = 4;
                 }
                 // if null then get random position
-                if (dst == null) dst = random_pos[p];
+                if (dst == null) {
+                	dst = random_pos[p];
+                }
+               
                 // if position is reached
                 if (Math.abs(src.x - dst.x) < 0.000001 &&
                     Math.abs(src.y - dst.y) < 0.000001) {
@@ -373,6 +376,7 @@ public class Player implements pppp.sim.Player {
                         random_pos[p] = dst = piper_to_cell.get(p);
                     }
                 }
+                System.out.println("dst: " + dst.x + ", " + dst.y);
                 if (pos_index[p] == 6 && num_captured_rats(pipers[id][p], rats) == 0)
                     pos_index[p] = 5;
                 if ((pos_index[p] == 3 || pos_index[p] == 7) && num_captured_rats(pipers[id][p], rats) == 0)
