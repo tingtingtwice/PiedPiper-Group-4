@@ -8,7 +8,7 @@ import pppp.g3.Strategy;
 import java.lang.Double;
 import java.lang.System;
 
-public class AngularSweep implements pppp.g3.Strategy {
+public class TenPiperStrategy implements pppp.g3.Strategy {
 
     private int id = -1;
 	private int side = 0;

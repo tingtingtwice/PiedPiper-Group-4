@@ -92,6 +92,93 @@ public class Player implements pppp.sim.Player {
         }
     }
 
+    private PlayerState nextStrategicState(int pidx, Point[][] piperPos, Move[][] piperVel, boolean[][] pipers_played,
+                                           Point[] ratPos) {
+        double rat_density = ratPos.length * 1.0 / (side * side);
+        double player_density = piperPos[id].length * 1.0 / (side * side);
+
+        // compute clustering
+        int square_side = 10;
+        int bins = side / square_side + 1;
+        int counter[][] = new int[bins][bins];
+
+        for (int i = 0; i < ratPos.length; ++i) {
+            int x = (int) ((ratPos[i].x + side / 2) / square_side);
+            int y = (int) ((ratPos[i].y + side / 2) / square_side);
+            counter[x][y]++;
+        }
+
+        int max_rats = 0;
+        double mean = ratPos.length * 1.0 / bins * bins;
+        double var = 0;
+        for (int i = 0; i < counter.length; ++i) {
+            for (int j = 0; j < counter[i].length; ++j) {
+                if (counter[i][j] > max_rats) {
+                    max_rats = counter[i][j];
+                }
+                var += Math.pow((counter[i][j] - mean), 2) / (bins * bins);
+            }
+        }
+
+        double std = Math.sqrt(var);
+
+
+        boolean ratInFriendlyZone[] = new boolean[ratPos.length];
+        boolean ratInEnemyZone[] = new boolean[ratPos.length];
+
+        // initialize arrays
+        for (int i = 0; i < ratPos.length; ++i) {
+            ratInEnemyZone[i] = false;
+            ratInFriendlyZone[i] = false;
+        }
+
+        for (int e = 0; e < piperPos.length; ++e) {
+            for (int i = 0; i < piperPos[e].length; ++i) {
+                List<Integer> nearby = util.getIndicesWithinDistance(piperPos[e][i], ratPos, 10);
+                for (int j : nearby) {
+                    if (e == id) {
+                        ratInFriendlyZone[j] = true;
+                    } else {
+                        ratInEnemyZone[j] = true;
+                    }
+                }
+            }
+        }
+
+        int unattached_rats = 0;
+        int enemy_range_rats = 0;
+        for (int i = 0; i < ratPos.length; ++i) {
+            if (ratInEnemyZone[i]) {
+                ++enemy_range_rats;
+            }
+            if (!ratInEnemyZone[i] && !ratInFriendlyZone[i]) {
+                ++unattached_rats;
+            }
+        }
+
+        double frac_unattached = unattached_rats * 1.0 / ratPos.length;
+        double frac_enemy_range = enemy_range_rats * 1.0 / ratPos.length;
+
+        if (std > 30) {
+            return new SweepState();
+        } else if ((rat_density / player_density) >= 1.0) {
+            if (pidx < piperPos[id].length * frac_unattached + 0.5) {
+                return new RetrieveClosestRatState();
+            } else {
+                return new RetrieveMostRatsState();
+            }
+            /*
+            if (pidx < piperPos[id].length * frac_enemy_range + 0.5) {
+                return new RetrieveMostRatsState();
+            } else {
+                return new RetrieveClosestRatState();
+            }
+            */
+        } else {
+            return new RetrieveClosestRatState();
+        }
+    }
+
     private Move[] play_transformed(int id, int side, Point[][] piperPos, Move[][] piperVel, boolean[][] pipers_played,
                                     Point[] ratPos) {
         // THE ENEMIES GATE IS DOWN!!!
@@ -163,20 +250,7 @@ public class Player implements pppp.sim.Player {
         @Override
         public PlayerState nextState(int pidx, Point[][] piperPos, Move[][] piperVel, boolean[][] pipers_played,
                                      Point[] ratPos) {
-            double rat_density = ratPos.length * 1.0 / (side * side);
-            double player_density = piperPos[id].length * 1.0 / (side * side);
-
-            if (rat_density > 0.003) {
-                return new SweepState();
-            } else if ((rat_density / player_density) >= 2.5) {
-                if (pidx < 2) {
-                    return new RetrieveMostRatsState();
-                } else {
-                    return new RetrieveClosestRatState();
-                }
-            } else {
-                return new RetrieveClosestRatState();
-            }
+            return nextStrategicState(pidx, piperPos, piperVel, pipers_played, ratPos);
         }
 
         @Override
@@ -374,46 +448,49 @@ public class Player implements pppp.sim.Player {
             int max_pidx = piperPos[id].length;
 
             // group into sets of 2
-            this.dest = new Point(side * ((pidx + 1) * 1.0 / (max_pidx + 1)) - side / 2, -side / 5.5);
+            this.dest = new Point(side * ((pidx + 1) * 1.0 / (max_pidx + 1)) - side / 2, -side / 10);
             return super.stateComplete(pidx, piperPos, piperVel, pipers_played, ratPos);
         }
 
         @Override
         public PlayerState nextState(int pidx, Point[][] piperPos, Move[][] piperVel, boolean[][] pipers_played,
                                      Point[] ratPos) {
-            return new GroupWaitState() {
+            Point destination = new Point(0, side / 2);
+            long endTime = tick + (long)(side / 0.1 * 4);
+            return new PlayerState() {
                 @Override
-                public PlayerState nextState(int pidx, Point[][] piperPos, Move[][] piperVel, boolean[][] pipers_played,
-                                             Point[] ratPos) {
-                    return new PlayerState() {
-                        @Override
-                        public PlayerState nextState(int pidx, Point[][] piperPos, Move[][] piperVel,
-                                                     boolean[][] pipers_played, Point[] ratPos) {
-                            return new DepositState();
-                        }
+                public PlayerState nextState(int pidx, Point[][] piperPos, Move[][] piperVel,
+                                             boolean[][] pipers_played, Point[] ratPos) {
+                    return new DepositState();
+                }
 
-                        @Override
-                        public Move computeMove(int pidx, Point[][] piperPos, Move[][] piperVel,
-                                                boolean[][] pipers_played, Point[] ratPos) {
-                            return new Move(0, 0.1, true);
-                        }
+                @Override
+                public Move computeMove(int pidx, Point[][] piperPos, Move[][] piperVel,
+                                        boolean[][] pipers_played, Point[] ratPos) {
+                    PotentialField pf = new PotentialField(util, side, id, pidx, true, piperPos, piperVel, pipers_played, ratPos);
 
-                        @Override
-                        public boolean stateComplete(int pidx, Point[][] piperPos, Move[][] piperVel,
-                                                     boolean[][] pipers_played, Point[] ratPos) {
-                            return side / 2 - piperPos[id][pidx].y < 10;
-                        }
+                    // add in a destination point
+                    pf.addPotential(destination, -400.0);
 
-                        @Override
-                        public boolean sameStateAs(PlayerState other) {
-                            return true;
-                        }
+                    Point next = pf.computeMove();
 
-                        @Override
-                        public String toString() {
-                            return "MovingUpState";
-                        }
-                    };
+                    return Util.moveToLoc(piperPos[id][pidx], next, true);
+                }
+
+                @Override
+                public boolean stateComplete(int pidx, Point[][] piperPos, Move[][] piperVel,
+                                             boolean[][] pipers_played, Point[] ratPos) {
+                    return (tick > endTime) || (side / 2 - piperPos[id][pidx].y) < 0.2 * (side / 2);
+                }
+
+                @Override
+                public boolean sameStateAs(PlayerState other) {
+                    return true;
+                }
+
+                @Override
+                public String toString() {
+                    return "MovingUpState";
                 }
             };
         }
@@ -531,7 +608,12 @@ public class Player implements pppp.sim.Player {
         @Override
         public PlayerState nextState(int pidx, Point[][] piperPos, Move[][] piperVel, boolean[][] pipers_played,
                                      Point[] ratPos) {
-            return new DoorState();
+            if (inApproach) {
+                // terminated early! :(
+                return nextStrategicState(pidx, piperPos, piperVel, pipers_played, ratPos);
+            } else {
+                return new DoorState();
+            }
         }
 
         @Override

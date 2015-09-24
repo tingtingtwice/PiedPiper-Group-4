@@ -1,4 +1,4 @@
-package pppp.g0;
+package pppp.g2;
 
 import pppp.sim.Point;
 
@@ -15,7 +15,8 @@ public class Piper {
     public Point prevLocation;
     public Point curLocation;
     public boolean playedMusic;
-    public double absMovement;
+    public double movementX;
+    public double movementY;
     public Strategy strategy;
 
     public Piper(int id, Point curLocation) {
@@ -24,7 +25,8 @@ public class Piper {
         this.prevLocation = null;
         this.curLocation = curLocation;
         this.playedMusic = false;
-	    this.absMovement = 0;
+	this.movementX = 1;
+	this.movementY = 1;
         this.strategy = new Strategy();
     }
 
@@ -34,7 +36,8 @@ public class Piper {
         this.prevLocation = null;
         this.curLocation = curLocation;
         this.playedMusic = false;
-        this.absMovement = 0;
+        this.movementX = 1;
+	this.movementY = 1;
         this.strategy = strategy;
     }
 
@@ -44,7 +47,8 @@ public class Piper {
         this.prevLocation = null;
         this.curLocation = curLocation;
         this.playedMusic = playedMusic;
-        this.absMovement = 0;
+        this.movementX = 1;
+	this.movementY = 1;
         this.strategy = new Strategy();
     }
 
@@ -54,9 +58,11 @@ public class Piper {
 
     public void updateLocation(Point point) {
 	if (this.prevLocation != null) {
-	    double memory = 4;
-	    absMovement = absMovement * (memory - 1) / memory;
-	    absMovement += Math.hypot(point.x - this.prevLocation.x, point.y - this.prevLocation.y) / memory;
+	    double memory = 16;
+	    movementX = movementX * (memory - 1) / memory;
+	    movementY = movementY * (memory - 1) / memory;
+	    movementX += (point.x - this.prevLocation.x) / memory;
+	    movementY += (point.y - this.prevLocation.y) / memory;
 	}
         this.prevLocation = this.curLocation;
         this.curLocation = point;
@@ -75,6 +81,6 @@ public class Piper {
     }
 
     public double getAbsMovement() {
-	return absMovement;
+	return Math.sqrt(movementX * movementX + movementY * movementY);
     }
 }

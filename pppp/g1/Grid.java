@@ -13,10 +13,11 @@ public class Grid {
      * @param side   Side of the grid.
      * @param slices Number of devisions by which to devide the side.
      */
-    public Grid(int side, int slices) {
+    public Grid(int side, double cellSize) {
         // The board consists of size^2 number of square cells.
         this.side = side;
-        cellSize = (double) side / slices;
+        this.cellSize = cellSize;
+        int slices = (int) (side / cellSize);
         double offset = (double) side / 2;
         this.grid = new Cell[slices][slices];
         for (int i = 0; i < slices; i++) {
@@ -61,7 +62,40 @@ public class Grid {
             }
         }
     }
-
+    
+    public double avgWeights() {
+    	int sum = 0;
+    	int n_cells = 0;
+    	for(Cell[] rows : grid) {
+    		for(Cell cell : rows) {
+    			sum += cell.weight;
+    			++n_cells;
+    		}
+    	}
+    	return sum/n_cells;
+    }
+    
+    public String visualize() {
+    	double average = avgWeights();
+    	String out = ""+average+"\n";
+    	for(int i = 0; i < grid.length; ++i) {
+    		for(int j = 0; j < grid[i].length; ++j) {
+    			int index = grid[i].length - 1 - i;
+    			int weight = grid[j][index].weight;
+    			String str = weight+"";
+    			if(weight > 1.3*average) str = "+"+str;
+    			if(weight > 2*average) str = "+"+str;
+    			out += String.format("%1$4s", str);
+    		}
+    		out += "\n";
+    	}
+    	return out;
+    }
+    
+    public String toString() {
+    	return visualize();
+    }
+ 
     /**
      * Find the cell containing the given point.
      *

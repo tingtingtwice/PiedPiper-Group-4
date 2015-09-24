@@ -9,8 +9,10 @@ public class Player implements pppp.sim.Player {
 
 	// see details below
 	private int currentStrategy = -1;
+	private int initialStrategy;
 	private final int NUMBER_OF_MOVES = 6;
 	private int n_rats;
+	private int initial_n_rats;
 	private int n_pipers;
 	private int id = -1;
 	private int side = 0;
@@ -21,7 +23,6 @@ public class Player implements pppp.sim.Player {
 	//private Point[] random_pos = null;
 	//private Random gen = new Random();
 	private boolean directionFlag =false;
-	
 	
 	HashMap<Integer,int[]> strategyPositionArray = new HashMap<Integer,int[]>();
 	
@@ -62,6 +63,7 @@ public class Player implements pppp.sim.Player {
 		this.side = side; 
 		n_pipers = pipers[id].length;
 		n_rats = rats.length;
+		initial_n_rats = rats.length;
 		//println("N Pipers" + n_pipers);
 		posStrategySparse = new Point[n_pipers][NUMBER_OF_MOVES];
 		posStrategyDense = new Point[n_pipers][NUMBER_OF_MOVES];
@@ -71,16 +73,18 @@ public class Player implements pppp.sim.Player {
 		pos_index = new int [n_pipers];
 
 		// Check for sparse or dense environment
-		if(n_rats < 20){
+		if(n_rats <= 20){
 		
 			// Use sparse strategy
 			currentStrategy = Strategy.SPARSE_STRATEGY;
+			initialStrategy = currentStrategy;
 		}
 		
 		else{
 	
 			// Use dense stragegy
 			currentStrategy = Strategy.DENSE_STRATEGY;
+			initialStrategy = currentStrategy;
 		}
 		
 		
@@ -116,27 +120,20 @@ public class Player implements pppp.sim.Player {
 			//first point is the door
 			pos[p][0]  = point(door, side * 0.5, neg_y, swap);
 			
-			//second point is the calculated angle for each piper
-			if(p == 0){
-				pos[p][1] = findNearestRatWithinInfluence(rats, pos[p][0]);
-				if(pos[p][1] == null){
-					pos[p][1] = pipers[id][p];
-				}
-			}
-			else{
-				pos[p][1] = findNearestRatOutsideInfluence(rats, pipers[id][p], posStrategySparse[0][1],pos[p][0]);
-				if(pos[p][1] == null){
-					pos[p][1] = pipers[id][p];
-				}
-			}
+			// If rat within limit, all go there
+			
+			// 
+			pos[p][1] = findRatNearestToBase(rats, pos[p][0]);
 			
 			//third point is the merge point outside the door
-			
-			pos[p][2] = pos[p][0];			
-			pos[p][3] = point(door * -6, side * 0.5 + 3, neg_y, swap);
-			pos[p][4] = point(door * +6, side * 0.5 + 3, neg_y, swap);
-			// No 6th step
-			pos[p][5] = pos[p][4];
+			// pos[p][2] = check to see if any within safe area
+			// if so, take it, otherwise return
+			pos[p][2] = pos[p][0];
+			pos[p][3] = pos[p][0];
+			//pos[p][3] = point(door * 0.1, side * 0.5, neg_y, swap);
+			pos[p][4] = point(door * -6, side * 0.5 + 3, neg_y, swap);
+			pos[p][5] = pos[p][4];// = point(door * +6, side * 0.5 + 3, neg_y, swap);
+
 			
 			
 			pos_index[p] = 0;
@@ -201,25 +198,61 @@ public class Player implements pppp.sim.Player {
 	public void play(Point[][] pipers, boolean[][] pipers_played,
 	                 Point[] rats, Move[] moves)
 	{
+			//Gets the current number of rats
 			n_rats = rats.length;
 			
 			
+			
+			Boolean pipersTogether = arePipersTogether(pipers);
+			Boolean needToWait = needToWaitAtGate(rats, pos[0][0]);
+			System.out.print("\n");
 			for (int p = 0 ; p != n_pipers ; ++p) {
 			Point src = pipers[id][p];
 			// Reupdate target position for constantly moving targets
-			if(currentStrategy == Strategy.SPARSE_STRATEGY && p == 1){
-				if(p == 0){
-					pos[p][1] = findNearestRatWithinInfluence(rats, pos[p][0]);
-					if(pos[p][1] == null){
-						pos[p][1] = pipers[id][p];
+			System.out.print("\n");
+			if(currentStrategy == Strategy.SPARSE_STRATEGY){
+				System.out.print(pos_index[p]+ " : " + pos[p][pos_index[p]].x + ", "+pos[p][pos_index[p]].y);
+				if(pos_index[p] == 0){
+					pos[p][1] = findRatNearestToBase(rats, pos[p][0]);
+				}
+				else if(pos_index[p] == 1){
+					
+					// Ensure all pipers are on top of each other
+					if(pipersTogether == false){
+						pos[p][1] = pos[p][0];
+						
+						pos_index[p]--;						
+					}
+					else{
+						Point newRatPos = findRatNearestToBase(rats, pos[p][0]);
+						if(newRatPos.distance(pos[p][1]) > 0.5){
+							pos[p][1] = newRatPos;
+						}
 					}
 				}
-				else{
-					pos[p][1] = findNearestRatOutsideInfluence(rats, pipers[id][p], posStrategySparse[0][1],pos[p][0]);
-					if(pos[p][1] == null){
-						pos[p][1] = pipers[id][p];
+				else if(pos_index[p] == 2 || pos_index[p] == 3){
+					Point nextNearestRat = findNextNearestRat(rats, pos[p][0], src);
+					if(pos_index[p] == 2){
+						if(nextNearestRat != null){
+							pos[p][2] = nextNearestRat;
+						}
+						else{
+							pos_index[p]++;
+						}						
+					}
+					else if(pos_index[p] == 3){
+						if(nextNearestRat != null){
+							pos[p][2] = nextNearestRat;
+							pos_index[p]--;
+						}
 					}
 				}
+				else if(pos_index[p] == 4){
+					if(needToWait == true){
+						pos_index[p]--;
+					}
+				}
+								
 			}
 			Point dst = pos[p][pos_index[p]];
 			
@@ -241,10 +274,30 @@ public class Player implements pppp.sim.Player {
 				//if (dst == random_pos[p]) random_pos[p] = null;
 				
 				// get next position
-				if (++pos_index[p] == pos[p].length) pos_index[p] = 0;{
+				++pos_index[p];
+				if(currentStrategy == Strategy.SPARSE_STRATEGY && pos_index[p] == 1 && pipersTogether == false){
+					--pos_index[p];
+				}
+				else if(currentStrategy == Strategy.SPARSE_STRATEGY && p != 0){
+					pos_index[p] = pos_index[p-1];
+				}
+				if(pos_index[p] == pos[p].length){
+					
+					pos_index[p] = 0;
+					if(initialStrategy == Strategy.DENSE_STRATEGY && n_rats < initial_n_rats/ 4){
+						currentStrategy = Strategy.SPARSE_STRATEGY;
+						sparseStrategyPositions(pipers,rats);
+					}
+					
+					
+					
+				}
+				dst = pos[p][pos_index[p]];
+
+/*				if (++pos_index[p] == pos[p].length) pos_index[p] = 0;{
 				dst = pos[p][pos_index[p]];
 				}
-				
+*/				
 				
 				// generate a new position if random
 				//Random commented
@@ -266,7 +319,7 @@ public class Player implements pppp.sim.Player {
 			}
 			// get move towards position
 			moves[p] = move(src, dst, pos_index[p] > 1);
-			//moves[p+1] = move(src2, new Point(dst.x+.25,dst.y+.25), pos_index[p] > 1);
+		
 		}
 	}
 	
@@ -281,9 +334,6 @@ public class Player implements pppp.sim.Player {
 	// Returns location of the nearest rat within the semi-sphere
 	// (ie rats guarenteed to be grabbed safely)
 	// returns -1 if none
-	public void findNearestRatWithinInfluence(){
-		
-	}
 	
 	
 	double truncate(double number, int precision)
@@ -353,5 +403,68 @@ public class Player implements pppp.sim.Player {
 	}
 
 
+	public Point findRatNearestToBase(Point[] rats, Point doorPos){
+		float minDistance = -1;
+		int ratIndex = -1;
+		for(int i = 0; i<rats.length;i++){
+			float dist = (float) doorPos.distance(rats[i]);
+			if(ratIndex == -1){
+				minDistance = dist;
+				ratIndex = i;
+			}
+			else{
+				if(dist < minDistance){
+					minDistance = dist;
+					ratIndex = i;
+				}
+			}
+		}
+		return rats[ratIndex];
+	}
+
+	public Point findNextNearestRat(Point[] rats, Point doorPos, Point curPos){
+		float minDistance = -1;
+		int ratIndex = -1;
+		for(int i = 0; i<rats.length;i++){
+			float distToDoor  = (float) doorPos.distance(rats[i]);
+			float distToPiper = (float) curPos.distance(rats[i]); 
+			if(distToDoor < 100.0/4 && distToPiper > 10f){
+				if(ratIndex == -1){
+					minDistance = distToDoor;
+					ratIndex = i;
+				}
+				else{
+					if(distToDoor < minDistance){
+						minDistance = distToDoor;
+						ratIndex = i;
+					}
+				}
+			}
+		}
+		if(ratIndex == -1){
+			return null;
+		}
+		else{
+			return rats[ratIndex];		
+		}
+	}
+
+	public Boolean arePipersTogether(Point[][] pipers){
+		for(int i = 0; i<n_pipers;i++){
+			if(pipers[id][0].distance(pipers[id][i]) > 1){
+				return false;
+			}
+		}
+		return true;
+	}
 	
+	public Boolean needToWaitAtGate(Point[] rats, Point doorPos){
+		for(int i = 0; i<rats.length;i++){
+			float distToDoor  = (float) doorPos.distance(rats[i]);			
+			if(distToDoor <= 10 && distToDoor > 3){
+				return true;
+			}
+		}		
+		return false;
+	}
 }

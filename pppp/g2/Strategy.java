@@ -1,4 +1,4 @@
-package pppp.g0;
+package pppp.g2;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ public class Strategy {
     public Map<String, Object> properties;
 
     public Strategy() {
-        this.type = StrategyType.none;
+        this.type = StrategyType.diffusion;
         this.properties = new HashMap<String, Object>();
     }
 

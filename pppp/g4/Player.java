@@ -18,7 +18,7 @@ public class Player implements pppp.sim.Player {
 	private int total_regions = 0;
 	Boolean[] completed_sweep = null;
     private Cell[] grid = null;
-    private static double density_threshold = 0.002;
+    private static double density_threshold = 0.005;
     private Boolean sparse_flag = false;
     Map<Integer, Point> piper_to_cell = null;
     int tick = 0;
@@ -47,7 +47,7 @@ public class Player implements pppp.sim.Player {
 
 
     double getSweepRadius(Point[] rats, Point[] boundaries, int id){
-        double radius = side/3;
+        double radius = side/1.8;
         int sum_strip1 = 0;
         int sum_strip2 = 0;
         int sum_rem = 0;
@@ -76,13 +76,63 @@ public class Player implements pppp.sim.Player {
                     {sum_rem += 1;  }     
             } 
         }
-        avg = (sum_strip1 + sum_strip2)/2;
+        avg = (sum_strip1 + sum_strip2+ sum_rem)/2;
         if (sum_strip2 > avg )
         {
             radius = side/2.5;
         }
-        else if (sum_strip1 >= 1.2*avg) {
+        else if (sum_strip1 >avg) {
             radius = side/4;
+        }
+        System.out.println("Total rats : "+rats.length+ " | strip 1 : "+ sum_strip1 + " | strip 2 : "+ sum_strip2 + " | remaining "+ sum_rem + " | RADIUSLinkedFolder : "+radius);
+        return radius;
+    }
+    double getSweepRadius2(Point[] rats, Point[] boundaries, int id){
+        double radius = side/3;
+        int sum_strip1 = 0;
+        int sum_strip2 = 0;
+        int sum_strip3 = 0;
+        int sum_rem = 0;
+        double avg = 0.0;
+
+        for(Point rat: rats)
+        {
+            if (id == 0 || id == 2)
+            {
+                //Only consider y axis boundaries
+                if ((rat.y >= Math.min(boundaries[0].y, boundaries[1].y)) && ((rat.y < Math.max(boundaries[0].y, boundaries[1].y))))
+                    {sum_strip1 += 1;}
+                else if ((rat.y >= Math.min(boundaries[1].y, boundaries[2].y)) && ((rat.y < Math.max(boundaries[1].y, boundaries[2].y))))
+                    {sum_strip2 += 1;}
+                else if ((rat.y >= Math.min(boundaries[2].y, boundaries[3].y)) && ((rat.y < Math.max(boundaries[2].y, boundaries[3].y))))
+                     {sum_strip3 += 1;}
+                else
+                    {sum_rem += 1;}  //between 75 to 100 all rats we leave this as too risky area..             
+            }
+            else if (id == 1 || id == 3)
+            {
+                // id = 1 or 3 | Considering X-axis only
+                if ((rat.x > Math.min(boundaries[0].x, boundaries[1].x)) && ((rat.x < Math.max(boundaries[0].x, boundaries[1].x))))
+                    {sum_strip1 += 1;}  
+                else if ((rat.x > Math.min(boundaries[1].x, boundaries[2].x)) && ((rat.x < Math.max(boundaries[1].x, boundaries[2].x))))
+                    {sum_strip2 += 1;}
+                else if ((rat.x > Math.min(boundaries[2].x, boundaries[3].x)) && ((rat.x < Math.max(boundaries[2].x, boundaries[3].x))))
+                    {sum_strip3 += 1;}
+                else
+                    {sum_rem += 1;  }  //between 75 to 100 all rats we leave this as too risky area..     
+            } 
+        }
+        avg = (sum_strip1 + sum_strip2 + sum_strip3)/3;
+        if (sum_strip3 > avg )
+        {
+            radius = side/4*1;
+        }
+        else if (sum_strip2> avg) {
+            radius = side/4*2;
+        }else if (sum_strip1> avg) {
+            radius = side/4*3;
+        }else{//default do a long scan
+        	radius=side/4*3;
         }
         System.out.println("Total rats : "+rats.length+ " | strip 1 : "+ sum_strip1 + " | strip 2 : "+ sum_strip2 + " | remaining "+ sum_rem + " | RADIUS : "+radius);
         return radius;
@@ -130,6 +180,16 @@ public class Player implements pppp.sim.Player {
             boundaries[1] = point(side * 0.5 * 0.5, side * 0.5 * 0.5, neg_y, swap); // Between door and center
             boundaries[2] = point(0, 0, neg_y, swap); // At the center of the grid
             double distance = getSweepRadius(rats, boundaries, id);
+             
+            //fixed new for getSweepRadius2()
+			/*
+            Point[] boundaries2 = new Point[3];
+            boundaries2[0] = point(side * 0.5 * 1, side * 0.5 * 1, neg_y, swap); // At the door
+            boundaries2[1] = point(side * 0.5 * 0.5, side * 0.5 * 0.5, neg_y, swap); // Between door and center
+            boundaries2[2] = point(0, 0, neg_y, swap); // At the center of the grid
+             double distance = getSweepRadius(rats, boundaries2, id);
+            */
+           
 			double theta = Math.toRadians(p * 90.0 / (n_pipers - 1) + 45);
             pos[p][0] = point(door, side * 0.5, neg_y, swap);
             System.out.println("Init pos index 0: " + pos[p][0].x + ", " + pos[p][0].y);
