@@ -10,7 +10,7 @@ public class Player implements pppp.sim.Player {
     // see details below
     private int id = -1;
     private int side = 0;
-    private int stepsPerUnit = 1;
+    private double stepsPerUnit = 0.5;
     private int N;
     private int[] pos_index = null;
     private Point[][] pos = null;
@@ -37,7 +37,7 @@ public class Player implements pppp.sim.Player {
     private final double enemyPiperRepulsor = 0;
     private final double friendlyPiperRepulsor = -1;
     private final double friendlyInDanger = 30;
-    private final double D = 0.1;
+    private final double D = 0.2;
     private final double playThreshold = 3;
     private final double closeToGate = 25;
 
@@ -114,7 +114,7 @@ public class Player implements pppp.sim.Player {
 	this.side = side;
 	this.maxMusicStrength = (int)Math.log(4*pipers[id].length);
 	this.totalRats = rats.length;
-	N = (side+20) * stepsPerUnit + 1;
+	N = (int) ((side+20) * stepsPerUnit + 1);
 	perturber = new Random();
 	double delta = 2.1;
 	switch(id) {	   
@@ -319,7 +319,7 @@ public class Player implements pppp.sim.Player {
 	    }
 	}
 	for (int d=0; d<maxMusicStrength; d++) {
-	    rewardField[d][(int) (behindGateX + side/2 + 10) * stepsPerUnit][(int) (behindGateY * stepsPerUnit + side/2 + 10) * stepsPerUnit] = -100;
+	    rewardField[d][(int) ((behindGateX + side/2 + 10) * stepsPerUnit)][(int) ((behindGateY * stepsPerUnit + side/2 + 10) * stepsPerUnit)] = -100;
 	}
 	for (int t=0; t<4; t++) {
 	    for (int p=0; p<pipers[t].length; p++) {
@@ -338,7 +338,7 @@ public class Player implements pppp.sim.Player {
 		}
 	    }
 	}
-	for (int iter=0; iter<N; iter++) {
+	for (int iter=0; iter<N/2; iter++) {
 	    diffuse();
 	}
     }
@@ -424,8 +424,8 @@ public class Player implements pppp.sim.Player {
 		    int strength = Math.min(getMusicStrength(src, pipers[id],25),maxMusicStrength-1);
 		    int x = (int)Math.round((src.x + side/2 + 10)*stepsPerUnit);
 		    int y = (int)Math.round((src.y + side/2 + 10)*stepsPerUnit);
-		    int bestX = -1;
-		    int bestY = -1;
+		    double bestX = -1;
+		    double bestY = -1;
 		    double steepestPotential = -1000;
 		    for (int i=Math.max(x-3,0); i<=Math.min(x+3,N-1); i++) {
 			for (int j=Math.max(y-3,0); j<=Math.min(y+3,N-1); j++){
@@ -471,7 +471,7 @@ public class Player implements pppp.sim.Player {
 		    }
 		    else {
 			// if not already playing, play music when approaching local optima			
-			if (this.pipers.get(p).getAbsMovement() < 0.2 && nearbyRats(src, rats, null) > 0) {
+			if (this.pipers.get(p).getAbsMovement() < 0.45 && nearbyRats(src, rats, null) > 0) {
 			    playMusic = true;
 			}
 			else {
@@ -581,7 +581,7 @@ public class Player implements pppp.sim.Player {
     // pass distanceThreshold as null to use a default threshold value
     private int nearbyRats(Point src, Point[] rats, Integer distanceThreshold) {
         int ratsNearby = 0;
-        int threshold = 8;
+        double threshold = 9.5;
         if(distanceThreshold != null) {
             threshold = distanceThreshold;
         }
