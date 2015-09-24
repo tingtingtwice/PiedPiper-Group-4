@@ -279,10 +279,10 @@ public class Player implements pppp.sim.Player {
             if (cell != null) {
                 cell.weight = cell.weight + 1;
 
-                for (Point piper: our_pipers) {
-                    if (Utils.distance(piper, rat) <= 30 && Utils.distance(rat, our_gate) > side/10)
-                        cell.weight = cell.weight + (cell.weight/5);
-                }
+                // for (Point piper: our_pipers) {
+                //     if (Utils.distance(piper, rat) <= 30 && Utils.distance(rat, our_gate) > side/10)
+                //         cell.weight = cell.weight + (cell.weight/5);
+                // }
             }
 
         }
