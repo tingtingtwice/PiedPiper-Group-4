@@ -19,7 +19,6 @@ public class Player implements pppp.sim.Player {
 	Boolean[] completed_sweep = null;
     private Cell[] grid = null;
     private static double density_threshold = 0.005;
-    private static double 
     private Boolean sparse_flag = false;
     Map<Integer, Point> piper_to_cell = null;
     int tick = 0;
@@ -438,8 +437,14 @@ public class Player implements pppp.sim.Player {
                     }
                 }
                 System.out.println("dst: " + dst.x + ", " + dst.y);
-                if (pos_index[p] == 6 && num_captured_rats(pipers[id][p], rats) == 0)
+                if (pos_index[p] == 6 && num_captured_rats(pipers[id][p], rats) == 0) {
                     pos_index[p] = 5;
+                    grid = create_grid(side, rats.length);
+                    update_grid_weights(rats, pipers, our_gate);
+                    // sort the cells in the Cell[] grid in descending order of weight/number_of_rats
+                    Arrays.sort(this.grid, Collections.reverseOrder());
+                    piper_to_cell = get_piper_to_cell(pipers[id].length);
+                }
                 if ((pos_index[p] == 3 || pos_index[p] == 7) && num_captured_rats(pipers[id][p], rats) == 0)
                     pos_index[p] = 4;
                 if (pos_index[p] == 5 ) {
