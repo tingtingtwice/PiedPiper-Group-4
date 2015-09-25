@@ -218,10 +218,10 @@ public class Player implements pppp.sim.Player {
         int cell_side;
 
         if(isSparse(number_of_rats, side)) {
-            cell_side = 5;
+            cell_side = side/20;
         }
         else {
-            cell_side = 20;
+            cell_side = side/5;
         }
 
         int dim = 0;
