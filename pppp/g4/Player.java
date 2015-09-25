@@ -412,7 +412,7 @@ public class Player implements pppp.sim.Player {
                 Point dst = pos[p][pos_index[p]];
                 
 
-                if ((sparse_flag || ((!sparse_flag) && completed_sweep[p])) && (pos_index[p] == 1 ))
+                if ( (pos_index[p] == 1 ))
                 {
                     pos_index[p] = 4;
                 }
