@@ -395,7 +395,7 @@ public class Player implements pppp.sim.Player {
 					 Point[] rats, Move[] moves) {
         tick++;
         try {
-            if (tick % 80 == 0) {
+            if (tick % (side * 2 * 0.6) == 0) {
                 grid = create_grid(side, rats.length);
                 update_grid_weights(rats, pipers, our_gate);
                 // sort the cells in the Cell[] grid in descending order of weight/number_of_rats
