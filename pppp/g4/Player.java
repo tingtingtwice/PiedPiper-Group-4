@@ -19,6 +19,7 @@ public class Player implements pppp.sim.Player {
 	Boolean[] completed_sweep = null;
     private Cell[] grid = null;
     private static double density_threshold = 0.005;
+    private static double 
     private Boolean sparse_flag = false;
     Map<Integer, Point> piper_to_cell = null;
     int tick = 0;
@@ -218,7 +219,7 @@ public class Player implements pppp.sim.Player {
         int cell_side;
 
         if(isSparse(number_of_rats, side)) {
-            cell_side = side/20;
+            cell_side = side/10;
         }
         else {
             cell_side = side/5;
