@@ -19,7 +19,6 @@ public class Player implements pppp.sim.Player {
 	Boolean[] completed_sweep = null;
     private Cell[] grid = null;
     private static double density_threshold = 0.005;
-    private static double 
     private Boolean sparse_flag = false;
     Map<Integer, Point> piper_to_cell = null;
     int tick = 0;
@@ -396,7 +395,7 @@ public class Player implements pppp.sim.Player {
 					 Point[] rats, Move[] moves) {
         tick++;
         try {
-            if (tick % 80 == 0) {
+            if (tick % (side * 2 * 0.6) == 0) {
                 grid = create_grid(side, rats.length);
                 update_grid_weights(rats, pipers, our_gate);
                 // sort the cells in the Cell[] grid in descending order of weight/number_of_rats
