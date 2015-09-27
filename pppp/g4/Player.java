@@ -47,7 +47,7 @@ public class Player implements pppp.sim.Player {
 
 
     double getSweepRadius(Point[] rats, Point[] boundaries, int id){
-        double radius = side/1.8;
+        double radius = side/3;
         int sum_strip1 = 0;
         int sum_strip2 = 0;
         int sum_rem = 0;
@@ -267,6 +267,25 @@ public class Player implements pppp.sim.Player {
         }
         return null;
     }
+
+    public Boolean isAvailableRat(Point rat, Point[][] pipers)
+    {
+        for (int i=0; i<4; i++)
+        { // i => checks all id
+            if (i == id)
+                // our pipers, skip
+                continue;
+            else
+            {
+                for(int j=0; j<pipers[i].length; j++)
+                {
+                    if (Utils.distance(pipers[i][j], rat) <= 10)
+                        return Boolean.FALSE;
+                }
+            }
+        }
+        return Boolean.TRUE;
+    }
     
     public void update_grid_weights(Point[] rats, Point[][] pipers, Point our_gate) {
         for (int i=0; i < this.grid.length; i++) {
@@ -277,7 +296,10 @@ public class Player implements pppp.sim.Player {
         for (Point rat: rats) {
             Cell cell = find_cell(rat);
             if (cell != null) {
-                cell.weight = cell.weight + 1;
+                if (!isAvailableRat(rat, pipers))
+                    cell.weight = cell.weight + 1;
+                else
+                    cell.weight = cell.weight + 2;
 
                 // for (Point piper: our_pipers) {
                 //     if (Utils.distance(piper, rat) <= 30 && Utils.distance(rat, our_gate) > side/10)
@@ -411,7 +433,7 @@ public class Player implements pppp.sim.Player {
                 Point dst = pos[p][pos_index[p]];
                 
 
-                if ( (pos_index[p] == 1 ))
+                if ((sparse_flag || ((!sparse_flag) && completed_sweep[p])) && (pos_index[p] == 1 ))
                 {
                     pos_index[p] = 4;
                 }
