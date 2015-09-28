@@ -42,6 +42,16 @@ public class Player implements pppp.sim.Player {
         return new Move(dx, dy, play);
     }
 
+    private static int  getRatsCountOnDst(Point[] rats, Point dst,int nearbyRatScanRadius2){
+    	// create move towards specified destination
+    	HashSet<Point> nearbyRats= new HashSet<Point>();
+    	for (Point rat : rats) {
+			if ((Utils.distance(dst, rat) < nearbyRatScanRadius2)) {
+				nearbyRats.add(rat);
+			}
+		}
+		return nearbyRats.size();
+    }
     // generate point after negating or swapping coordinates
     private static Point point(double x, double y,
                                boolean neg_y, boolean swap_xy) {
@@ -584,10 +594,10 @@ public class Player implements pppp.sim.Player {
 
             for (int p = 0; p != pipers[id].length; ++p) {
 
-                 System.out.println("\n" + "piper:  " + p);
-                 System.out.println("pos index is: " + pos_index[p]);
+                System.out.println("\n" + "piper:  " + p);
+                System.out.println("pos index is: " + pos_index[p]);
                 Point src = pipers[id][p];
-                 System.out.println("src: " + src.x + ", " + src.y);
+                System.out.println("src: " + src.x + ", " + src.y);
                 Point dst = pos[p][pos_index[p]];
                 
 
@@ -603,11 +613,15 @@ public class Player implements pppp.sim.Player {
                     dst = random_pos[p];
                 }
 
+                //if nothing on DST then rest ?
+                if(pos_index[p] == 5 && getRatsCountOnDst( rats,   dst, 10)==0 ){
+                	System.out.println("NOTHING at destination");
+                }
                 // if position is reached
                 // if (dst!=null && Math.abs(src.x - dst.x) < 0.000001 &&
                     // Math.abs(src.y - dst.y) < 0.000001) {
-                if (Math.abs(src.x - dst.x) < 0.000001 &&
-                    Math.abs(src.y - dst.y) < 0.000001) {
+                if ((Math.abs(src.x - dst.x) < 0.000001 &&
+                    Math.abs(src.y - dst.y) < 0.000001) || (pos_index[p] == 5 && getRatsCountOnDst( rats,   dst, 10)==0 )) {
                     // discard random position
                     if (dst == random_pos[p]) random_pos[p] = null;
                     // get next position
