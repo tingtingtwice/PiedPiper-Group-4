@@ -44,7 +44,7 @@ public class Player implements pppp.sim.Player {
                     int group = p / GROUPSIZE;
                     groupLookup.put(p, group);
                     if (p % GROUPSIZE == 0) {
-                        groupReverseLookup.put(group, new ArrayList<>(GROUPSIZE));
+                        groupReverseLookup.put(group, new ArrayList<Integer>(GROUPSIZE));
                     }
                     groupReverseLookup.get(group).add(p);
                 }
@@ -455,8 +455,8 @@ public class Player implements pppp.sim.Player {
         @Override
         public PlayerState nextState(int pidx, Point[][] piperPos, Move[][] piperVel, boolean[][] pipers_played,
                                      Point[] ratPos) {
-            Point destination = new Point(0, side / 2);
-            long endTime = tick + (long)(side / 0.1 * 4);
+            final Point destination = new Point(0, side / 2);
+            final long endTime = tick + (long)(side / 0.1 * 4);
             return new PlayerState() {
                 @Override
                 public PlayerState nextState(int pidx, Point[][] piperPos, Move[][] piperVel,
