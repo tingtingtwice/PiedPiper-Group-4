@@ -183,8 +183,8 @@ public class Player implements pppp.sim.Player {
         try {
             this.id = id;
             this.side = side;
-            // density_threshold = 50/side*side;
-            density_threshold = 0.005;
+            density_threshold = 50/side*side;
+            // density_threshold = 0.005;
             int n_pipers = pipers[id].length;
             pos = new Point[n_pipers][8];
             random_pos = new Point[n_pipers];
@@ -365,7 +365,7 @@ public class Player implements pppp.sim.Player {
             for (Point rat: rats) {
                 Cell cell = find_cell(rat);
                 if (cell != null) {
-                    cell.weight = cell.weight + 1;
+                    cell.weight = cell.weight + 10;
 
     //                int status = isAvailableRat(rat, pipers);
     //                if (status == 1){
@@ -384,10 +384,10 @@ public class Player implements pppp.sim.Player {
     ////                    // status 3 means not available and with teammate
     ////                    cell.weight = cell.weight + 0;
     //
-    ////                for (Point piper: our_pipers) {
-    //                    if (/*Utils.distance(piper, rat) <= 30 &&*/ Utils.distance(rat, our_gate) < side/10)
-    //                        cell.weight = cell.weight - cell.weight/4;
-    ////                }
+    //                for (Point piper: our_pipers) {
+                       if (Utils.distance(our_gate, rat) <= side && Utils.distance(rat, our_gate) > side/10)
+                           cell.weight = cell.weight + 1;
+    //                }
                 }
 
             }
