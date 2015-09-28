@@ -73,7 +73,7 @@ public class AngularSweep implements pppp.g3.Strategy {
                     dst = piperStateMachine[p][piperState[p]];
                 }
                 int state = piperState[p];
-
+                
                 moves[p] = Movement.makeMove(src, dst, play(state));
             }
         }catch(NullPointerException e){

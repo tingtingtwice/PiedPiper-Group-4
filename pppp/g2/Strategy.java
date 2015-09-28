@@ -32,4 +32,10 @@ public class Strategy {
     public boolean isPropertySet(String property) {
         return this.properties.containsKey(property);
     }
+
+    public void incrementProperty(String property) {
+        if(isPropertySet(property)) {
+            this.properties.put(property, (Integer) this.properties.get(property) + 1);
+        }
+    }
 }

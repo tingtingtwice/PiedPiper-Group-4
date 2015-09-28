@@ -4,15 +4,15 @@ import pppp.sim.Move;
 import pppp.sim.Point;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by rbtying on 9/22/15.
  */
 public class PotentialField {
     private static final double TESTPOINT_CHARGE = 1.0;
+    private static final double IGNORE_RAT_DISTANCE = 75.0;
+    private static final double IGNORE_PIPER_DISTANCE = 85.0;
 
     private ArrayList<Point> points;
     private ArrayList<Double> charges;
@@ -33,7 +33,13 @@ public class PotentialField {
         initializePotentialField(id, pidx, piperPos, pipersPlaying, ratPos);
     }
 
-    public void initializePotentialField(int id, int pidx, Point piperPos[][], boolean pipersPlaying[][], Point ratPos[]) {
+    public void initializePotentialField(int id, int pidx, Point piperPos[][], boolean pipersPlaying[][], Point ratPosAll[]) {
+
+        List<Integer> rats = u.getIndicesWithinDistance(piperPos[id][pidx], ratPosAll, IGNORE_RAT_DISTANCE);
+        Point[] ratPos = new Point[rats.size()];
+        for (int i = 0; i < rats.size(); ++i) {
+            ratPos[i] = ratPosAll[rats.get(i)];
+        }
 
         boolean ratInFriendlyZone[] = new boolean[ratPos.length];
         boolean ratInEnemyZone[] = new boolean[ratPos.length];
@@ -51,12 +57,14 @@ public class PotentialField {
                 addFriendlyPiper(piperPos[id][i], pipersPlaying[id][i]);
             }
 
-            List<Integer> nearby = u.getIndicesWithinDistance(piperPos[id][i], ratPos, 10);
-            for (int j : nearby) {
-                if (i == pidx) {
-                    ratInMyZone[j] = true;
-                } else {
-                    ratInFriendlyZone[j] = true;
+            if (piperPos[id][i].distance(testPoint) <= IGNORE_PIPER_DISTANCE) {
+                List<Integer> nearby = u.getIndicesWithinDistance(piperPos[id][i], ratPos, 10);
+                for (int j : nearby) {
+                    if (i == pidx) {
+                        ratInMyZone[j] = true;
+                    } else {
+                        ratInFriendlyZone[j] = true;
+                    }
                 }
             }
         }
@@ -65,11 +73,15 @@ public class PotentialField {
             if (e == id) {
                 continue;
             }
+
+            // Only care about enemy that are close
             for (int i = 0; i < piperPos[e].length; ++i) {
                 addEnemyPiper(piperPos[e][i], pipersPlaying[e][i]);
-                List<Integer> nearby = u.getIndicesWithinDistance(piperPos[e][i], ratPos, 10);
-                for (int j : nearby) {
-                    ratInEnemyZone[j] = true;
+                if (piperPos[e][i].distance(testPoint) <= IGNORE_PIPER_DISTANCE) {
+                    List<Integer> nearby = u.getIndicesWithinDistance(piperPos[e][i], ratPos, 10);
+                    for (int j : nearby) {
+                        ratInEnemyZone[j] = true;
+                    }
                 }
             }
         }
@@ -84,20 +96,20 @@ public class PotentialField {
     public void addFriendlyPiper(Point loc, boolean playing) {
         if (playing) {
             // ok to go towards friendly playing
-            addPotential(loc, -1.0);
+            addPotential(loc, 5.0);
         } else {
             // go far away from friendly non-playing
-            addPotential(loc, 4.0);
+            addPotential(loc, 10.0);
         }
     }
 
     public void addEnemyPiper(Point loc, boolean playing) {
         if (playing) {
             // try to avoid enemy playing
-            addPotential(loc, 8.0);
+            addPotential(loc, 16.0);
         } else {
             // try less hard to avoid enemy non-playing
-            addPotential(loc, 3.0);
+            addPotential(loc, 7.0);
         }
 
     }
@@ -105,10 +117,9 @@ public class PotentialField {
     public void addRat(Point loc, boolean listeningToFriendly, boolean listeningToEnemy) {
         if (listeningToEnemy && listeningToFriendly) {
             // reinforce!!
-            addPotential(loc, -50.0);
+            addPotential(loc, -100.0);
         } else if (listeningToEnemy) {
-            // penalize enemy areas with lots of rats; probably protected
-            addPotential(loc, -4.0);
+            addPotential(loc, -7.0);
         } else if (listeningToFriendly) {
             addPotential(loc, -2.0);
         } else {

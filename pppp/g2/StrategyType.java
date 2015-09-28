@@ -6,5 +6,6 @@ package pppp.g2;
 public enum StrategyType {
     diffusion,
     sweep,
-    greedy
+    greedy,
+    adversarial
 }

@@ -2,7 +2,7 @@ package pppp.g6;
 
 import pppp.sim.Point;
 import pppp.sim.Move;
-
+//SETH
 import java.util.*;
 
 public class Player implements pppp.sim.Player {
@@ -23,6 +23,7 @@ public class Player implements pppp.sim.Player {
 	//private Point[] random_pos = null;
 	//private Random gen = new Random();
 	private boolean directionFlag =false;
+	private Point oppDoorPos;
 	
 	HashMap<Integer,int[]> strategyPositionArray = new HashMap<Integer,int[]>();
 	
@@ -111,6 +112,18 @@ public class Player implements pppp.sim.Player {
 		boolean neg_y = id == 2 || id == 3;
 		boolean swap  = id == 1 || id == 3;
 		
+		int oppositeId;
+		if(id < 1){
+			oppositeId = id + 2;
+		}
+		else{
+			oppositeId = id - 2;
+		}
+		boolean neg_y_opp =  oppositeId == 2 || oppositeId == 3;
+		boolean swap_opp  = oppositeId  == 1 || oppositeId == 3;
+		double door_opp = 0.0;
+		oppDoorPos  = point(door_opp, side * 0.5, neg_y_opp, swap_opp);
+
 		
 		for (int p = 0 ; p != n_pipers ; ++p) {
 			
@@ -123,7 +136,7 @@ public class Player implements pppp.sim.Player {
 			// If rat within limit, all go there
 			
 			// 
-			pos[p][1] = findRatNearestToBase(rats, pos[p][0]);
+			pos[p][1] = findRatNearestToBase(rats, pos[p][0], pos[p][0]);
 			
 			//third point is the merge point outside the door
 			// pos[p][2] = check to see if any within safe area
@@ -178,10 +191,10 @@ public class Player implements pppp.sim.Player {
 			//third point is the merge point outside the door
 			//pos[p][2] = point(door - 5, 0, neg_y, swap);
 			
-			pos[p][2] = point(0, distance * (1- Math.sin(theta)) ,neg_y, swap);
+			//pos[p][2] = point(0, distance * (1- Math.sin(theta)) ,neg_y, swap);
 			System.out.println("$$$$$$ POINT $$$$$$$" + distance * (1- Math.sin(theta)));
 			
-			pos[p][3]  = point(door * 0.1, side * 0.5, neg_y, swap);
+			pos[p][2]= pos[p][3]  = point(door * 0.5, side * 0.5, neg_y, swap);
 			
 			// fourth and fifth positions are outside the rat moving area
 			pos[p][4] = point(door * -6, side * 0.5 + 6, neg_y, swap);
@@ -205,15 +218,12 @@ public class Player implements pppp.sim.Player {
 			
 			Boolean pipersTogether = arePipersTogether(pipers);
 			Boolean needToWait = needToWaitAtGate(rats, pos[0][0]);
-			System.out.print("\n");
 			for (int p = 0 ; p != n_pipers ; ++p) {
 			Point src = pipers[id][p];
 			// Reupdate target position for constantly moving targets
-			System.out.print("\n");
 			if(currentStrategy == Strategy.SPARSE_STRATEGY){
-				System.out.print(pos_index[p]+ " : " + pos[p][pos_index[p]].x + ", "+pos[p][pos_index[p]].y);
 				if(pos_index[p] == 0){
-					pos[p][1] = findRatNearestToBase(rats, pos[p][0]);
+					pos[p][1] = findRatNearestToBase(rats, pos[p][0], src);
 				}
 				else if(pos_index[p] == 1){
 					
@@ -224,7 +234,7 @@ public class Player implements pppp.sim.Player {
 						pos_index[p]--;						
 					}
 					else{
-						Point newRatPos = findRatNearestToBase(rats, pos[p][0]);
+						Point newRatPos = findRatNearestToBase(rats, pos[p][0],src);
 						if(newRatPos.distance(pos[p][1]) > 0.5){
 							pos[p][1] = newRatPos;
 						}
@@ -346,68 +356,12 @@ public class Player implements pppp.sim.Player {
 	    fractionalPart = (double) (integerPart) + (double) (fractPart)/prec;
 	    return fractionalPart;
 	}
-	
-	// Used to finding nearest rat within radius
-	public Point findNearestRatWithinInfluence(Point[] rats, Point doorPos){
+
+	public Point findRatNearestToBase(Point[] rats, Point doorPos, Point curPos){
 		float minDistance = -1;
 		int ratIndex = -1;
 		for(int i = 0; i<rats.length;i++){
-			float dist = (float) doorPos.distance(rats[i]);
-			if(ratIndex == -1){
-				minDistance = dist;
-				ratIndex = i;
-			}
-			else{
-				if(minDistance < dist){
-					minDistance = dist;
-					ratIndex = i;
-				}
-			}
-		}
-		// If distance <= half length of wall, then proceed to it
-		if(minDistance <= side/2){
-			return rats[ratIndex];
-		}
-		else{
-			return null;
-		}
-	}
-
-	
-	// Used for finding rats outside "guarenteed radius"
-	public Point findNearestRatOutsideInfluence(Point[] rats, Point curPos, Point takenRatPos,Point doorPos){
-		float minDistance = -1;
-		int ratIndex = -1;
-		for(int i = 0; i<rats.length;i++){
-			if(takenRatPos == rats[i]){
-				continue;
-			}
-			float dist = (float) doorPos.distance(rats[i]);
-			if(ratIndex == -1){
-				minDistance = dist;
-				ratIndex = i;
-			}
-			else{
-				if(minDistance < dist){
-					minDistance = dist;
-					ratIndex = i;
-				}
-			}
-		}
-		if(ratIndex != -1){
-			return rats[ratIndex];
-		}
-		else{
-			return null;
-		}
-	}
-
-
-	public Point findRatNearestToBase(Point[] rats, Point doorPos){
-		float minDistance = -1;
-		int ratIndex = -1;
-		for(int i = 0; i<rats.length;i++){
-			float dist = (float) doorPos.distance(rats[i]);
+			float dist = (float) curPos.distance(rats[i]);
 			if(ratIndex == -1){
 				minDistance = dist;
 				ratIndex = i;
@@ -425,16 +379,45 @@ public class Player implements pppp.sim.Player {
 	public Point findNextNearestRat(Point[] rats, Point doorPos, Point curPos){
 		float minDistance = -1;
 		int ratIndex = -1;
+		float percentage = 0.7f;
+		boolean ignoreXvalues = doorPos.x == 0;
+		double bound = calcBound(ignoreXvalues, doorPos, rats, percentage);
+
+		
 		for(int i = 0; i<rats.length;i++){
 			float distToDoor  = (float) doorPos.distance(rats[i]);
 			float distToPiper = (float) curPos.distance(rats[i]); 
-			if(distToDoor < 100.0/4 && distToPiper > 10f){
+			if(ignoreXvalues){
+				if(doorPos.y == side/2){
+					if(rats[i].y > bound == false){
+						continue;
+					}
+				}
+				else{
+					if(rats[i].y < bound == false){
+						continue;
+					}
+				}
+			}
+			else{
+				if(doorPos.x == side/2){
+					if(rats[i].x > bound == false){
+						continue;
+					}
+				}
+				else{
+					if(rats[i].x < bound == false){
+						continue;
+					}
+				}				
+			}
+			if(distToPiper > 10f){
 				if(ratIndex == -1){
-					minDistance = distToDoor;
+					minDistance = distToPiper;
 					ratIndex = i;
 				}
 				else{
-					if(distToDoor < minDistance){
+					if(distToPiper < minDistance){
 						minDistance = distToDoor;
 						ratIndex = i;
 					}
@@ -442,12 +425,15 @@ public class Player implements pppp.sim.Player {
 			}
 		}
 		if(ratIndex == -1){
+			System.out.print("null");
+			
 			return null;
 		}
 		else{
 			return rats[ratIndex];		
 		}
 	}
+
 
 	public Boolean arePipersTogether(Point[][] pipers){
 		for(int i = 0; i<n_pipers;i++){
@@ -467,4 +453,54 @@ public class Player implements pppp.sim.Player {
 		}		
 		return false;
 	}
+	
+	// Returns the x or y bound where there exists percentage% number of the total rats within the range
+	// So returning -10 if the base is at (0,50) means that percentage% of the rats are between (x, 50) and (x, -10)
+	public double calcBound(boolean ignoreXvalues, Point doorPos, Point[] rats, float percentage){
+		double[] orderedPos = new double[rats.length];
+		if(ignoreXvalues){
+			for(int i = 0; i<rats.length;i++){
+				orderedPos[i] = rats[i].y;				
+			}		
+			Arrays.sort(orderedPos);
+
+			if(doorPos.y == side/2){
+				reverseArray(orderedPos);
+			}
+			
+			int estPercIndex = (int) (percentage*rats.length);
+			if(estPercIndex > 0){
+				estPercIndex--;
+			}
+			return orderedPos[estPercIndex];
+		}
+		else{
+			for(int i = 0; i<rats.length;i++){
+				orderedPos[i] = rats[i].x;				
+			}		
+			Arrays.sort(orderedPos);
+
+			if(doorPos.x == side/2){
+				reverseArray(orderedPos);
+			}
+			
+			int estPercIndex = (int) (percentage*rats.length);
+			if(estPercIndex > 0){
+				estPercIndex--;
+			}
+			return orderedPos[estPercIndex];			
+		}
+		
+	}
+	
+	public double[] reverseArray(double[] array){
+		for(int i = 0; i< array.length/2; i++){
+			double temp = array[i];
+			array[i] = array[array.length - 1 - i];
+			array[array.length - 1 - i] = temp;
+		}
+		return array;
+	}
+
+	
 }

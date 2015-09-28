@@ -835,7 +835,7 @@ private int count_rats(ArrayList<Point> locations, Point[] rats)
 				int j = 0;
 				while (!emptyRatFound)
 				{
-						if (j == (rats.length - 1))
+						if (j == (rats.length - 1)/2)
 						{
 							// Have to go after this one only
 							emptyRatFound = true;
@@ -850,7 +850,7 @@ private int count_rats(ArrayList<Point> locations, Point[] rats)
 								{
 									continue;
 								}
-								if (getDistance(pipers[id][k], rats[distRats[j].ratId] ) < 15)
+								if (getDistance(pipers[id][k], rats[distRats[j].ratId] ) < 5)
 								{
 									// Rat j is already taken, Try some other rat
 									j++;
@@ -864,7 +864,13 @@ private int count_rats(ArrayList<Point> locations, Point[] rats)
 						}
 					
 				}
-				pos[i][1] = new Point(rats[distRats[j].ratId].x, rats[distRats[j].ratId].y);
+				if (j == (rats.length - 1)/2)
+				{
+					pos[i][1] = new Point(rats[distRats[0].ratId].x, rats[distRats[0].ratId].y);
+				} 
+				{
+					pos[i][1] = new Point(rats[distRats[j].ratId].x, rats[distRats[j].ratId].y);
+				}		
 			}
 		
 		}
@@ -892,7 +898,7 @@ private int count_rats(ArrayList<Point> locations, Point[] rats)
 			if (pos_index[p] == 1)
 			{
 				
-				if (getDistance(src, dst) < 10)
+				if (getDistance(src, dst) < 5)
 				{
 					blowPiper[p] = true;
 					pos_index[p] = 2;
@@ -954,6 +960,10 @@ private int count_rats(ArrayList<Point> locations, Point[] rats)
 		{
 			playOnePiper(pipers, pipers_played, rats, moves);
 		}
+		else if (ratsInitCount <= 30)
+		{
+			playOnePiper(pipers, pipers_played, rats, moves);
+		} 
 		/*
 		else if (ratsInitCount < 200)
 		{
@@ -964,10 +974,33 @@ private int count_rats(ArrayList<Point> locations, Point[] rats)
 			play2(pipers, pipers_played, rats, moves);
 		}
 		
-		
 	}
 	
 	
+	private void initSweepPosition2(Point[] rats, Point[][] pipers)
+	{
+		boolean neg_y = id == 2 || id == 3;
+		boolean swap  = id == 1 || id == 3;
+		
+		for (int p = 0 ; p != pipers[id].length ; ++p) {
+			if (p%4 == 0)
+			{
+				pos[p][1] = point(0.45*side-10, 0.5*side-10, neg_y, swap);
+			}
+			if (p%4 == 1)
+			{
+				pos[p][1] = point(-0.20*side, 0.10*side, neg_y, swap);
+			}
+			if (p%4 ==2)
+			{
+				pos[p][1] = point(0.20*side, 0.10*side, neg_y, swap);
+			}
+			if (p%4 ==3)
+			{
+				pos[p][1] = point(-(0.45*side-10),  0.5*side-10, neg_y, swap);
+			}
+		}		
+	}
 	
 		
 	// return next locations on last argument
@@ -976,20 +1009,21 @@ private int count_rats(ArrayList<Point> locations, Point[] rats)
 	{
 		if (initialrats == null)
 		{initialrats = rats.length;}
-		for (int i = 0 ; i != pipers[id].length ; ++i) 
+		/*for (int i = 0 ; i != pipers[id].length ; ++i) 
 		{
 			if (pos_index[i] != pos_index_prev[i])
 			{
 				System.out.println("Piper " + i + " position : " + pos_index[i]);
 			}
 			pos_index_prev[i] = pos_index[i]; 
-		}
+		} */
 		
 		int granularity = 4;
-		if (rats.length > initialrats/3)
+		if (rats.length > initialrats/5)
 		{
-			initSweepPosition(rats, pipers);
-			playCount++;
+			//initSweepPosition(rats, pipers);
+			initSweepPosition2(rats, pipers);
+			playCount++;			
 			
 			for (int p = 0 ; p != pipers[id].length ; ++p) {
 				blowPiper[p] = false;
@@ -1041,7 +1075,7 @@ private int count_rats(ArrayList<Point> locations, Point[] rats)
 					}
 					if (moveRandom)
 					{	
-						System.out.println("Reached here man, Rats count " + rats.length + ", My mean point : ," + myMeanPoint.x + ", " + myMeanPoint.y + " : Opponent point : " + oppPoint.x + ", " + oppPoint.y + ", Opponent id : " + oppId + ", Distance " + getDistance(myMeanPoint, oppPoint));
+						//System.out.println("Reached here man, Rats count " + rats.length + ", My mean point : ," + myMeanPoint.x + ", " + myMeanPoint.y + " : Opponent point : " + oppPoint.x + ", " + oppPoint.y + ", Opponent id : " + oppId + ", Distance " + getDistance(myMeanPoint, oppPoint));
 						for (int p = 0 ; p != pipers[id].length ; ++p) {
 							if (pos_index[p] == 2)
 							{
@@ -1394,9 +1428,9 @@ private int count_rats(ArrayList<Point> locations, Point[] rats)
 		}
 		else //sparse case
 		{
+			playOnePiper(pipers, pipers_played, rats, moves);
 			
-			
-			boolean pipers_clustered = pipers_together(5,pipers);		
+			/*boolean pipers_clustered = pipers_together(5,pipers);		
 			Point[] next;	
 			if(!pipers_clustered)		
 			{		
@@ -1541,9 +1575,9 @@ private int count_rats(ArrayList<Point> locations, Point[] rats)
 				}
 				// get move towards position
 				moves[p] = move(src, dst, pos_index[p] > 1);
-			}
+			} */
 		
-		}
+		} 
 		
 	}
 

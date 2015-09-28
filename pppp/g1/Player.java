@@ -270,6 +270,42 @@ public class Player implements pppp.sim.Player {
             }
         }
     }
+    
+/*    private void routeReturn(Point[][] pipers, boolean[][] pipers_played, Point[] rats) {
+    	Point[] ourPipers = pipers[id];
+    	ArrayList<Integer> returningPipersIntegers = new ArrayList<Integer>();
+    	for(int i = 0; i < ourPipers.length; ++i) {
+    		if(pos_state[i] == TO_GATE) {
+    			returningPipersIntegers.add(i);
+    		}
+    	}
+    	Point[] returningPipersPoints = new Point[returningPipersIntegers.size()];
+    	for(int i = 0; i < returningPipersIntegers.size(); ++i)
+    		returningPipersPoints[i] = 
+    	Grid returningPiperGrid = new Grid(side, 20);
+    	returningPiperGrid.updateCellWeights(pipers, pipers_played, returningPipersPoints);
+    	for(Integer piper : returningPipers) {
+    		double[] distances = new double[returningPipers.size()];
+    		for(int i = 0; i < returningPipers.size(); ++i) {
+    			Integer otherPiper = returningPipers.get(i);
+    			if(otherPiper != piper) {
+    				distances[i] = Utils.distance(ourPipers[piper], ourPipers[otherPiper]);
+    			}
+    			else {
+    				distances[i] = Double.MAX_VALUE;
+    			}
+    			
+    		}
+    	}
+    } */
+    
+    private double getTeamInfluence(int teamID, Point targetPoint, Point[][] pipers, boolean pipers_played) {
+    	double influence = 0;
+    	for(int i = 0; i < pipers[teamID].length; ++i)
+    		// cap influence per piper to 0.1 since its the same if they are < 10m
+    		influence += Math.min(1/Utils.distance(pipers[teamID][i], targetPoint), 0.1);
+    	return influence;
+    }
 
     /**
      * Number of rats within specified range from the piper.
@@ -324,6 +360,10 @@ public class Player implements pppp.sim.Player {
             if (pos_state[piper_id] == TO_GOAL)
                 EPSILON = RAT_EPSILON;
 
+            if (trg.point == null) {
+                trg.point = src;
+            }
+            
             if (Utils.isAtDest(src, trg.point, EPSILON)) {
                 // Progress the movement to the next step.
                 pos_state[piper_id] = (pos_state[piper_id] + 1) % 4;

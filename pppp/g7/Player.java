@@ -44,7 +44,7 @@ public class Player implements pppp.sim.Player {
                     int group = p / GROUPSIZE;
                     groupLookup.put(p, group);
                     if (p % GROUPSIZE == 0) {
-                        groupReverseLookup.put(group, new ArrayList<Integer>(GROUPSIZE));
+                        groupReverseLookup.put(group, new ArrayList<>(GROUPSIZE));
                     }
                     groupReverseLookup.get(group).add(p);
                 }
@@ -161,7 +161,7 @@ public class Player implements pppp.sim.Player {
 
         if (std > 30) {
             return new SweepState();
-        } else if ((rat_density / player_density) >= 1.0) {
+        } else if ((rat_density / player_density) >= 1.5) {
             if (pidx < piperPos[id].length * frac_unattached + 0.5) {
                 return new RetrieveClosestRatState();
             } else {
@@ -187,9 +187,9 @@ public class Player implements pppp.sim.Player {
         // state machine
         for (int p = 0; p < piperPos[id].length; ++p) {
             if (states[p].stateComplete(p, piperPos, piperVel, pipers_played, ratPos)) {
-                System.out.print("piper: " + p + " | " + states[p]);
+//                System.out.print("piper: " + p + " | " + states[p]);
                 states[p] = states[p].nextState(p, piperPos, piperVel, pipers_played, ratPos);
-                System.out.println(" -> " + states[p]);
+//                System.out.println(" -> " + states[p]);
             }
             m[p] = states[p].computeMove(p, piperPos, piperVel, pipers_played, ratPos);
         }
@@ -262,6 +262,7 @@ public class Player implements pppp.sim.Player {
     public class RetrieveClosestRatState extends GoToLocationState {
         private static final int REACQUIRE_TICKS = 1;
         private static final int DEPTH = 1;
+        private static final double RAT_IS_CLOSE_ENOUGH_DIST = 5.0;
         public int targetRat;
         private long startTick;
 
@@ -284,7 +285,7 @@ public class Player implements pppp.sim.Player {
         @Override
         public boolean stateComplete(int pidx, Point[][] piperPos, Move[][] piperVel, boolean[][] pipers_played,
                                      Point[] ratPos) {
-            List<Integer> rats = util.getIndicesWithinDistance(piperPos[id][pidx], ratPos, 10);
+            List<Integer> rats = util.getIndicesWithinDistance(piperPos[id][pidx], ratPos, RAT_IS_CLOSE_ENOUGH_DIST);
 
             if (ratPos.length <= piperPos[id].length) {
                 return super.stateComplete(pidx, piperPos, piperVel, pipers_played, ratPos);
@@ -314,13 +315,76 @@ public class Player implements pppp.sim.Player {
         @Override
         public PlayerState nextState(int pidx, Point[][] piperPos, Move[][] piperVel, boolean[][] pipers_played,
                                      Point[] ratPos) {
-            return new DepositState();
+            if (ratPos.length == 1) {
+                return new FightState();
+            } else {
+                return new DepositState();
+            }
         }
 
         @Override
         public String toString() {
             return util.stateName(this);
         }
+    }
+
+    private class FightState extends DepositState {
+        // special class for fighting over the last rat
+        private Point lastRatPos;
+
+        public FightState() {
+            lastRatPos = null;
+        }
+
+        @Override
+        public Move computeMove(int pidx, Point[][] piperPos, Move[][] piperVel, boolean[][] pipers_played,
+                                Point[] ratPos) {
+            Point pp = piperPos[id][pidx];
+            Point rp = ratPos[0];
+            double dist = pp.distance(rp);
+            Move m = null;
+
+            if (dist > 10) {
+                m = Util.moveToLoc(pp, rp, false);
+            } else {
+                boolean contested = false;
+                for (int i = 0; i < piperPos.length; ++i) {
+                    if (i == id) {
+                        continue;
+                    }
+                    for (int j = 0; j < piperPos[i].length; ++j) {
+                        if (piperPos[i][j].distance(rp) < 10) {
+                            contested = true;
+                            break;
+                        }
+                    }
+                }
+                Point dest;
+                if (Math.abs(pp.x) < 1) {
+                    dest = new Point(0, side / 2 + 2.1);
+                } else {
+                    dest = new Point(0, side / 2);
+                }
+                if (!contested) {
+                    m = Util.moveToLoc(pp, dest, true);
+                } else {
+                    m = Util.moveToLoc(pp, dest, !pipers_played[id][pidx]);
+                    // contested!
+                }
+            }
+
+            lastRatPos = rp;
+
+            return m;
+        }
+
+        @Override
+        public boolean stateComplete(int pidx, Point[][] piperPos, Move[][] piperVel, boolean[][] pipers_played,
+                                     Point[] ratPos) {
+            // never transition out
+            return false;
+        }
+
     }
 
     private class RetrieveMostRatsState implements PlayerState {
@@ -448,15 +512,20 @@ public class Player implements pppp.sim.Player {
             int max_pidx = piperPos[id].length;
 
             // group into sets of 2
-            this.dest = new Point(side * ((pidx + 1) * 1.0 / (max_pidx + 1)) - side / 2, -side / 10);
+            double radius = side/3.0;
+            double angle_increment = Math.PI / (max_pidx + 3.0);
+            double angle = angle_increment * (pidx + 2);
+            double y_value = Math.sin(angle)* radius - side/5.0;
+            double x_value = Math.cos(angle)*radius;
+            this.dest = new Point(x_value, -y_value);
             return super.stateComplete(pidx, piperPos, piperVel, pipers_played, ratPos);
         }
 
         @Override
         public PlayerState nextState(int pidx, Point[][] piperPos, Move[][] piperVel, boolean[][] pipers_played,
                                      Point[] ratPos) {
-            final Point destination = new Point(0, side / 2);
-            final long endTime = tick + (long)(side / 0.1 * 4);
+            Point destination = new Point(0, side / 2);
+            long endTime = tick + (long)(side / 0.1 * 4);
             return new PlayerState() {
                 @Override
                 public PlayerState nextState(int pidx, Point[][] piperPos, Move[][] piperVel,
@@ -467,12 +536,14 @@ public class Player implements pppp.sim.Player {
                 @Override
                 public Move computeMove(int pidx, Point[][] piperPos, Move[][] piperVel,
                                         boolean[][] pipers_played, Point[] ratPos) {
+//                    long ntime = System.nanoTime();
                     PotentialField pf = new PotentialField(util, side, id, pidx, true, piperPos, piperVel, pipers_played, ratPos);
 
                     // add in a destination point
                     pf.addPotential(destination, -400.0);
 
                     Point next = pf.computeMove();
+//                    System.out.println((System.nanoTime() - ntime) * 1.0e-9);
 
                     return Util.moveToLoc(piperPos[id][pidx], next, true);
                 }
@@ -557,6 +628,7 @@ public class Player implements pppp.sim.Player {
     public class DepositState extends GoToLocationState {
         // max rat distance divided by max rat speed
         private static final double MAX_WAIT_TICKS = 2 * 10 / 0.01 + 10e9;
+        private static final double RAT_IS_CAPTURED_DISTANCE = 6;
 
         private long startTick;
         private int numRatsAtLastCheck;
@@ -574,7 +646,7 @@ public class Player implements pppp.sim.Player {
                                      Point[] ratPos) {
             boolean atLoc = super.stateComplete(pidx, piperPos, piperVel, pipers_played, ratPos);
 
-            List<Integer> rats = util.getIndicesWithinDistance(piperPos[id][pidx], ratPos, 10);
+            List<Integer> rats = util.getIndicesWithinDistance(piperPos[id][pidx], ratPos, RAT_IS_CAPTURED_DISTANCE);
             this.numRatsAtLastCheck = rats.size();
             if (rats.isEmpty()) {
                 return true;
@@ -602,7 +674,6 @@ public class Player implements pppp.sim.Player {
             }
 
             return false;
-
         }
 
         @Override
