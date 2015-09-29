@@ -152,55 +152,16 @@ public class Player implements pppp.sim.Player {
         return radius;
     }
 
-    double getSweepRadius2(Point[] rats, Point[] boundaries, int id){
-        double radius = side/3;
-        int sum_strip1 = 0;
-        int sum_strip2 = 0;
-        int sum_strip3 = 0;
-        int sum_rem = 0;
-        double avg = 0.0;
-
-        for(Point rat: rats)
-        {
-            if (id == 0 || id == 2)
-            {
-                //Only consider y axis boundaries
-                if ((rat.y >= Math.min(boundaries[0].y, boundaries[1].y)) && ((rat.y < Math.max(boundaries[0].y, boundaries[1].y))))
-                    {sum_strip1 += 1;}
-                else if ((rat.y >= Math.min(boundaries[1].y, boundaries[2].y)) && ((rat.y < Math.max(boundaries[1].y, boundaries[2].y))))
-                    {sum_strip2 += 1;}
-                else if ((rat.y >= Math.min(boundaries[2].y, boundaries[3].y)) && ((rat.y < Math.max(boundaries[2].y, boundaries[3].y))))
-                     {sum_strip3 += 1;}
-                else
-                    {sum_rem += 1;}  //between 75 to 100 all rats we leave this as too risky area..             
-            }
-            else if (id == 1 || id == 3)
-            {
-                // id = 1 or 3 | Considering X-axis only
-                if ((rat.x > Math.min(boundaries[0].x, boundaries[1].x)) && ((rat.x < Math.max(boundaries[0].x, boundaries[1].x))))
-                    {sum_strip1 += 1;}  
-                else if ((rat.x > Math.min(boundaries[1].x, boundaries[2].x)) && ((rat.x < Math.max(boundaries[1].x, boundaries[2].x))))
-                    {sum_strip2 += 1;}
-                else if ((rat.x > Math.min(boundaries[2].x, boundaries[3].x)) && ((rat.x < Math.max(boundaries[2].x, boundaries[3].x))))
-                    {sum_strip3 += 1;}
-                else
-                    {sum_rem += 1;  }  //between 75 to 100 all rats we leave this as too risky area..     
-            } 
-        }
-        avg = (sum_strip1 + sum_strip2 + sum_strip3)/3;
-        if (sum_strip3 > avg )
-        {
-            radius = side/4*1;
-        }
-        else if (sum_strip2> avg) {
-            radius = side/4*2;
-        }else if (sum_strip1> avg) {
-            radius = side/4*3;
-        }else{//default do a long scan
-            radius=side/4*3;
-        }
-        // System.out.println("Total rats : "+rats.length+ " | strip 1 : "+ sum_strip1 + " | strip 2 : "+ sum_strip2 + " | remaining "+ sum_rem + " | RADIUS : "+radius);
-        return radius;
+    public Point[] get_sweep_coordinates(int side)
+    {
+        Point[] sweep_coord = new Point[6];
+        sweep_coord[0] = new Point(side * -0.5 * 0.5, side * 0.5 * 0.7);
+        sweep_coord[1] = new Point(side * 0.5 * 0.5, side * 0.5 * 0.7);
+        sweep_coord[2] = new Point(side * -0.5 * 0.9, side * 0.5 * 0.9);
+        sweep_coord[3] = new Point(side * -0.5 * 0.9, side * 0.5 * 0.7);
+        sweep_coord[4] = new Point(side * 0.5 * 0.9, side * 0.5 * 0.9);
+        sweep_coord[5] = new Point(side * 0.5 * 0.9, side * 0.5 * 0.7);
+        return sweep_coord;
     }
 
 
@@ -252,7 +213,21 @@ public class Player implements pppp.sim.Player {
             if (isSparse(rats.length, side, (50/(side * side))))
                     sparse_flag = true;
 
+            Point[] all_points = new Point[6];
+
+            all_points = get_sweep_coordinates(side);
+            // all_points[0] = new Point(- 0.9, side * 0.5 * .5);
+            // all_points[1] = new Point(- 0.9 - 5, side * 0.5 * .5);
+            // all_points[2] = new Point(- 0.9 - 10, side * 0.5 * .5);
+            // all_points[3] = new Point(- 0.9 + 5, side * 0.5 * .5);
+            // all_points[4] = new Point(- 0.9 + 10, side * 0.5 * .5);
+            // all_points[5] = new Point(- 0.9 + 15, side * 0.5 * .5);
+
+            int[] assignment = new int[n_pipers];
+
             for (int p = 0; p != n_pipers; ++p) {
+                assignment[p] = p % 6;
+
                 double door = 0.0;
                 if (n_pipers != 1) door = p * 1.8 / (n_pipers - 1) - 0.9;
 
@@ -261,7 +236,11 @@ public class Player implements pppp.sim.Player {
                 Point inside_gate = point(door, side * 0.5 * 1.2, neg_y, swap);// first and third position is at the door
                 double theta = Math.toRadians(p * 90.0 / (n_pipers - 1) + 45);
                 pos[p][0] = point(door, side * 0.5, neg_y, swap);
-                pos[p][1] = (n_pipers==1 ? null: point(distance * Math.cos(theta), (side/2) + (-1) * distance * Math.sin(theta), neg_y, swap));
+                // pos[p][1] = (n_pipers==1 ? null: point(distance * Math.cos(theta), (side/2) + (-1) * distance * Math.sin(theta), neg_y, swap));
+                pos[p][1] = (n_pipers==1 ? null: point(all_points[assignment[p]].x, all_points[assignment[p]].y, neg_y, swap));
+
+                // if ( (p % 6) == 0 || (p % 6) == 1 ) 
+                //     pos[p][2] = 
                 pos[p][2] = before_gate;
                 pos[p][3] = inside_gate;
                 pos[p][4] = before_gate;
@@ -616,6 +595,7 @@ public class Player implements pppp.sim.Player {
 
                 Point src = pipers[id][p];
                 Point dst = pos[p][pos_index[p]];
+                System.out.println("Piper id: " + p + ", position index: " + pos_index[p]);
 
                 if ((sparse_flag || ((!sparse_flag) && completed_sweep[p])) && (pos_index[p] == 1 ))
                 {
