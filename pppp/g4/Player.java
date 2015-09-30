@@ -633,10 +633,10 @@ public class Player implements pppp.sim.Player {
                 //  System.out.println("NOTHING at destination" + dst.x + " | " + dst.y);
                 // }
                 // if position is reached
-                if ((Math.abs(src.x - dst.x) < 0.000001 &&
-                    Math.abs(src.y - dst.y) < 0.000001))
                 // if ((Math.abs(src.x - dst.x) < 0.000001 &&
-                    // Math.abs(src.y - dst.y) < 0.000001) /*|| (pos_index[p] == 5 && getRatsCountOnDst( rats,   dst, 10)==0 )*/) 
+                //     Math.abs(src.y - dst.y) < 0.000001))
+                if ((Math.abs(src.x - dst.x) < 0.000001 &&
+                    Math.abs(src.y - dst.y) < 0.000001) || (pos_index[p] == 6 && getRatsCountOnDst( rats,   dst, 10)==0 )) 
                 {
                     // System.out.println("Reached position : "+dst.x + " | " + dst.y);
                     // discard random position
@@ -664,15 +664,15 @@ public class Player implements pppp.sim.Player {
                     // Arrays.sort(this.grid, Collections.reverseOrder());
                     // piper_to_cell = get_piper_to_cell(pipers);
                 }
-                // if ((pos_index[p] == 6) && (num_captured_rats(pipers[id][p], rats) >= 1) /*&& (get_closest_rat(rats, box_boundaries, pipers[id][p]) != null) && (!isBoundaryRat[p]) && (piper_close_to_home(pipers[id][p]))*/)
-                // {      
-                    // System.out.println("close to home setting destination at boundary !!!! " + pipers[id][p].x + " | "+ pipers[id][p].y);
-                    // System.out.println("Home base : " + our_gate.x + " | " + our_gate.y + " | Near gate : "+ near_gate.x + " | "+ near_gate.y);  
-                    // pos_index[p] = 5;
-                    // random_pos[p] = dst = get_closest_rat(rats, box_boundaries, pipers[id][p]);
+                if ((pos_index[p] == 7) && (num_captured_rats(pipers[id][p], rats) >= 1) && (get_closest_rat(rats, box_boundaries, pipers[id][p]) != null) && (!isBoundaryRat[p]) && (piper_close_to_home(pipers[id][p])))
+                {      
+                //     System.out.println("close to home setting destination at boundary !!!! " + pipers[id][p].x + " | "+ pipers[id][p].y);
+                //     System.out.println("Home base : " + our_gate.x + " | " + our_gate.y + " | Near gate : "+ near_gate.x + " | "+ near_gate.y);  
+                    pos_index[p] = 6;
+                    random_pos[p] = dst = get_closest_rat(rats, box_boundaries, pipers[id][p]);
                     // System.out.println("----------> New destination : "+dst.x + " | " + dst.y);
-                    // isBoundaryRat[p] = Boolean.TRUE;
-                // }
+                    isBoundaryRat[p] = Boolean.TRUE;
+                }
 
                 if ((pos_index[p] == 4 || pos_index[p] == 8) && num_captured_rats(pipers[id][p], rats) == 0)
                     pos_index[p] = 5;
@@ -694,7 +694,7 @@ public class Player implements pppp.sim.Player {
                 }
 
                 // get move towards position
-                moves[p] = move(src, dst, (pos_index[p] > 1 && pos_index[p] < 5) || (pos_index[p] > 6) /*|| (isBoundaryRat[p])*/);
+                moves[p] = move(src, dst, (pos_index[p] > 1 && pos_index[p] < 5) || (pos_index[p] > 6) || (isBoundaryRat[p] && (num_captured_rats(pipers[id][p], rats) >= 1)));
                 // System.out.println("Piper to cell map:");
                 // for (Map.Entry<Integer, Point> entry: piper_to_cell.entrySet()) {
                 //     if (entry.getValue() != null)
