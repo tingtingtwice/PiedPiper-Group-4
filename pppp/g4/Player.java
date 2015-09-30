@@ -156,11 +156,11 @@ public class Player implements pppp.sim.Player {
     {
         Point[] sweep_coord = new Point[6];
 
-        sweep_coord[0] = new Point(side * -0.5 * 0.5, side * 0.5 * 0.35);
+        sweep_coord[4] = new Point(side * -0.5 * 0.5, side * 0.5 * 0.35);
         sweep_coord[1] = new Point(side * 0.5 * 0.5, side * 0.5 * 0.35);
         sweep_coord[2] = new Point(side * -0.5 * 0.8, side * 0.5 * 0.9);
-        sweep_coord[3] = new Point(side * -0.5 * 0.8, side * 0.5 * 0.3);
-        sweep_coord[4] = new Point(side * 0.5 * 0.8, side * 0.5 * 0.9);
+        sweep_coord[0] = new Point(side * -0.5 * 0.8, side * 0.5 * 0.3);
+        sweep_coord[3] = new Point(side * 0.5 * 0.8, side * 0.5 * 0.9);
         sweep_coord[5] = new Point(side * 0.5 * 0.8, side * 0.5 * 0.3);
         return sweep_coord;
     }
@@ -237,10 +237,48 @@ public class Player implements pppp.sim.Player {
             // all_points[4] = new Point(- 0.9 + 10, side * 0.5 * .5);
             // all_points[5] = new Point(- 0.9 + 15, side * 0.5 * .5);
 
+            int[] pipers_needed_all_points = new int[6];
+            for(int i=0; i<6; i++) {
+                pipers_needed_all_points[i] = pipers[id].length/6;
+            }
+            int pipers_left = pipers[id].length % 6;
+            int i=0;
+            while(pipers_left !=0) {
+                pipers_needed_all_points[i] += 1;
+                i++;
+                pipers_left--;
+            }
+
+            int sum_of_together_pipers = pipers[id].length - 1;
+            int max_id = sum_of_together_pipers/2;
+
             int[] assignment = new int[n_pipers];
 
             for (int p = 0; p != n_pipers; ++p) {
-                assignment[p] = p % 6;
+
+                
+                int fake_p = 0;
+
+                if (p >= max_id ) {
+                    fake_p = sum_of_together_pipers - p;
+                    assignment[p] = assignment[fake_p];
+                }
+                else
+                {
+                    // fake_p = p;
+                    // for (int j=0; j<6; j++) {
+                    //     if (pipers_needed_all_points[j] !=0) {
+                    //         assignment[p] = j;
+                    //         pipers_needed_all_points[j] -= 1;
+                    //         break;
+                    //     }
+                    // }
+                    assignment[p] = p % 6;
+                }
+
+                if (fake_p < 0) 
+                    fake_p = 0;
+
 
                 double door = 0.0;
                 if (n_pipers != 1) door = p * 1.8 / (n_pipers - 1) - 0.9;
@@ -258,9 +296,9 @@ public class Player implements pppp.sim.Player {
                     pos[p][2] = all_return_points[0];
                 else if ( (p % 6) == 1 ) 
                     pos[p][2] = all_return_points[1];
-                else if ( (p % 6) == 2 || (p % 6) == 3 ) 
+                else if ( (p % 6) == 2 || (p % 6) == 4 ) 
                     pos[p][2] = all_return_points[2];
-                else if ( (p % 6) == 4 || (p % 6) == 5 ) 
+                else if ( (p % 6) == 3 || (p % 6) == 5 ) 
                     pos[p][2] = all_return_points[3];
 
                 pos[p][3] = before_gate;
@@ -408,6 +446,9 @@ public class Player implements pppp.sim.Player {
     //                for (Point piper: our_pipers) {
                        if (Utils.distance(our_gate, rat) <= side/2 && Utils.distance(rat, our_gate) > side/10)
                            cell.weight = cell.weight + 1;
+
+                       if (Utils.distance(rat, our_gate) < 12) 
+                            cell.weight = cell.weight - 10;
     // //                }
                 }
 
