@@ -136,7 +136,7 @@ public class Player implements pppp.sim.Player {
         box_boundaries[0] = point(side * 0.5 * -0.5, side * 0.5 * 0.75, neg_y, swap);
         box_boundaries[1] = point(side * 0.5 * 0.5, side * 0.5, neg_y, swap);
         
-        if (Utils.isSparse(rats.length, side, (50/(side * side)))) {
+        if (Utils.isSparse(rats.length, side, (50.0/(side * side)))) {
             // sparse_flag is for sweeping. 
             sparse_flag = true;
         }
@@ -211,7 +211,7 @@ public class Player implements pppp.sim.Player {
     
         int cell_side;
 
-        if(Utils.isSparse(number_of_rats, side, (5/(side*side)))) {
+        if(Utils.isSparse(number_of_rats, side, (5.0/(side*side)))) {
             cell_side = 5;
         }
         else {
@@ -292,7 +292,7 @@ public class Player implements pppp.sim.Player {
                     int status = isAvailableRat(rat, pipers);
                     if (status == 1) {
                         //rat is available
-                        cell.weight = cell.weight + 2;
+                        cell.weight = cell.weight + 3;
                     }
                     if (Utils.distance(our_gate, rat) <= side/2 && Utils.distance(rat, our_gate) > side/10) {
                         // rat is within our half of the grid, but not too close to the gate
@@ -482,7 +482,7 @@ public class Player implements pppp.sim.Player {
             }
 
             if ((Math.abs(src.x - dst.x) < 0.000001 &&
-                Math.abs(src.y - dst.y) < 0.000001) || (pos_index[p] == 6 && Utils.getRatsCountOnDst( rats,   dst, 10)==0 )) 
+                Math.abs(src.y - dst.y) < 0.000001) ) 
             {
                 // discard random position
                 if (dst == random_pos[p]) random_pos[p] = null;
@@ -499,22 +499,18 @@ public class Player implements pppp.sim.Player {
                 }
             }
 
+            if ((pos_index[p] == 6 && Utils.getRatsCountOnDst( rats,   dst, 10)==0 )) {
+                piper_to_cell = get_piper_to_cell(pipers);
+                random_pos[p] = dst = piper_to_cell.get(p);            
+            }
+
             if ((pos_index[p] == 7 ) && (Utils.num_captured_rats(pipers[id][p], rats) == 0)) {
                 pos_index[p] = 6;
-            }
-            if ((pos_index[p] == 7) 
-                && (Utils.num_captured_rats(pipers[id][p], rats) >= 1) 
-                && (Utils.get_closest_rat(rats, box_boundaries, pipers[id][p]) != null) 
-                && (!isBoundaryRat[p]) && (piper_close_to_home(pipers[id][p])))
-            {      
-                pos_index[p] = 6;
-                random_pos[p] = dst = Utils.get_closest_rat(rats, box_boundaries, pipers[id][p]);
-                isBoundaryRat[p] = Boolean.TRUE;
             }
 
             if ((pos_index[p] == 4 || pos_index[p] == 8) && Utils.num_captured_rats(pipers[id][p], rats) == 0)
                 pos_index[p] = 5;
-            if ((pos_index[p] == 6 ) && (!isBoundaryRat[p])){
+            if ((pos_index[p] == 6 )){
                 // just got free to do something
                 // reassign piper to null destination first - no longer assigned to previous cell 
                 // (because we're using non-null values in this map to compute set of unassigned pipers)
@@ -531,10 +527,9 @@ public class Player implements pppp.sim.Player {
             }
 
             // get move towards position
-            boolean play = (pos_index[p] > 1 && pos_index[p] < 5) || (pos_index[p] > 6) || (isBoundaryRat[p] && (Utils.num_captured_rats(pipers[id][p], rats) >= 1));
+            boolean play = (pos_index[p] > 1 && pos_index[p] < 5) || (pos_index[p] > 6);
             moves[p] = move(src, dst, play);
         }
-        
         
     }
 }
