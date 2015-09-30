@@ -155,12 +155,12 @@ public class Player implements pppp.sim.Player {
     public Point[] get_sweep_coordinates(int side)
     {
         Point[] sweep_coord = new Point[6];
-        sweep_coord[0] = new Point(side * -0.5 * 0.5, side * 0.5 * 0.7);
-        sweep_coord[1] = new Point(side * 0.5 * 0.5, side * 0.5 * 0.7);
-        sweep_coord[2] = new Point(side * -0.5 * 0.9, side * 0.5 * 0.9);
-        sweep_coord[3] = new Point(side * -0.5 * 0.9, side * 0.5 * 0.7);
-        sweep_coord[4] = new Point(side * 0.5 * 0.9, side * 0.5 * 0.9);
-        sweep_coord[5] = new Point(side * 0.5 * 0.9, side * 0.5 * 0.7);
+        sweep_coord[0] = new Point(side * -0.5 * 0.5, side * 0.5 * 0.4);
+        sweep_coord[1] = new Point(side * 0.5 * 0.5, side * 0.5 * 0.4);
+        sweep_coord[2] = new Point(side * -0.5 * 0.9, side * 0.5 * 0.8);
+        sweep_coord[3] = new Point(side * -0.5 * 0.9, side * 0.5 * 0.4);
+        sweep_coord[4] = new Point(side * 0.5 * 0.9, side * 0.5 * 0.8);
+        sweep_coord[5] = new Point(side * 0.5 * 0.9, side * 0.5 * 0.4);
         return sweep_coord;
     }
 
@@ -171,8 +171,6 @@ public class Player implements pppp.sim.Player {
         try {
             this.id = id;
             this.side = side;
-            // density_threshold = 50/(side*side);
-            // density_threshold = 0.005;
             int n_pipers = pipers[id].length;
             pos = new Point[n_pipers][8];
             random_pos = new Point[n_pipers];
@@ -210,8 +208,11 @@ public class Player implements pppp.sim.Player {
             box_boundaries[1] = point(side * 0.5 * 0.5, side * 0.5, neg_y, swap);
             
             
-            if (isSparse(rats.length, side, (50/(side * side))))
-                    sparse_flag = true;
+            if (isSparse(rats.length, side, (50/(side * side)))){
+                // sparse_flag is for sweeping. 
+                System.out.println("sparse_flag for sweep is : " + sparse_flag);
+                sparse_flag = true;
+            }
 
             Point[] all_points = new Point[6];
 
@@ -235,7 +236,8 @@ public class Player implements pppp.sim.Player {
                 Point before_gate = point(door, side * 0.5 * .85, neg_y, swap);
                 Point inside_gate = point(door, side * 0.5 * 1.2, neg_y, swap);// first and third position is at the door
                 double theta = Math.toRadians(p * 90.0 / (n_pipers - 1) + 45);
-                pos[p][0] = point(door, side * 0.5, neg_y, swap);
+                // pos[p][0] = point(door, side * 0.5, neg_y, swap);
+                pos[p][0] = point(0, side * 0.5, neg_y, swap);
                 // pos[p][1] = (n_pipers==1 ? null: point(distance * Math.cos(theta), (side/2) + (-1) * distance * Math.sin(theta), neg_y, swap));
                 pos[p][1] = (n_pipers==1 ? null: point(all_points[assignment[p]].x, all_points[assignment[p]].y, neg_y, swap));
 
@@ -267,7 +269,7 @@ public class Player implements pppp.sim.Player {
      */
         int cell_side;
 
-        if(isSparse(number_of_rats, side, (5/side*side))) {
+        if(isSparse(number_of_rats, side, (5/(side*side)))) {
 
             cell_side = 5;
         }
@@ -376,9 +378,9 @@ public class Player implements pppp.sim.Player {
     //                    // }      
     //                    cell.weight = cell.weight + 3;                      
     //                }
-    //                else if (status == 2 )  
-    //                    // status 2 means not available and with opponent
-    //                    cell.weight = cell.weight - cell.weight/4;
+                   // else if (status == 2 )  
+                       // status 2 means not available and with opponent
+                       // cell.weight = cell.weight - 2;
     ////                else
     ////                    // status 3 means not available and with teammate
     ////                    cell.weight = cell.weight + 0;
