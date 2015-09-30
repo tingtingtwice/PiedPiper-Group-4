@@ -16,19 +16,16 @@ public class Player implements pppp.sim.Player {
     private Random gen = new Random();
     private int dst_no = 0;
     private int total_regions = 0;
-    Boolean[] completed_sweep = null;
     private Cell[] grid = null;
-    // private static double density_threshold = 0;
     private Boolean sparse_flag = false;
-    // Map<Integer, Point> piper_to_cell = null;
     int tick = 0;
     Point our_gate = null;
     Point near_gate = null;
     Point[] box_boundaries = new Point[2];
     Boolean[] isBoundaryRat = null; // flag to set for playing music when rat in boundary
-
-    Map<Integer, Point> piper_to_cell = new HashMap<Integer, Point>();
-    Map<Point, Set<Integer>> cell_to_piper = new HashMap<Point, Set<Integer>>();
+    Boolean[] completed_sweep = null; // flag to check if sweep is over
+    Map<Integer, Point> piper_to_cell = new HashMap<Integer, Point>(); // stores piper to cell assignment
+    Map<Point, Set<Integer>> cell_to_piper = new HashMap<Point, Set<Integer>>(); // stores cell to piper assignment
 
     // create move towards specified destination
     private static Move move(Point src, Point dst, boolean play) {
@@ -43,16 +40,6 @@ public class Player implements pppp.sim.Player {
         return new Move(dx, dy, play);
     }
 
-    private static int  getRatsCountOnDst(Point[] rats, Point dst,int nearbyRatScanRadius2){
-        // create move towards specified destination
-        HashSet<Point> nearbyRats= new HashSet<Point>();
-        for (Point rat : rats) {
-            if ((Utils.distance(dst, rat) < nearbyRatScanRadius2)) {
-                nearbyRats.add(rat);
-            }
-        }
-        return nearbyRats.size();
-    }
     // generate point after negating or swapping coordinates
     private static Point point(double x, double y,
                                boolean neg_y, boolean swap_xy) {
@@ -60,48 +47,22 @@ public class Player implements pppp.sim.Player {
         return swap_xy ? new Point(y, x) : new Point(x, y);
     }
 
-    public Point get_closest_rat(Point[] rats, Point[] box_boundaries, Point piper)
-    {  // returns rat + position which are within the box_boundary near the gate and closest to that piper //
-        if (box_boundaries.length != 2)
-            return null; 
-        //List<Point> closest_rats = new ArrayList<Point>();
-        double closest_distance = Double.POSITIVE_INFINITY;
-        Point closest_rat = null;
-        for(Point rat : rats)
-        {
-            if((Math.min(box_boundaries[0].x, box_boundaries[1].x) <= rat.x) && (rat.x <= (Math.max(box_boundaries[0].x, box_boundaries[1].x))) && (Math.min(box_boundaries[0].y, box_boundaries[1].y) <= rat.y) && (rat.y <= (Math.max(box_boundaries[0].y, box_boundaries[1].y))))
-            { // if rat in box_boundary
-                //closest_rats.add(rat);
-                if ((Utils.distance(piper, rat) < closest_distance) && (closest_distance >= 10.0))
-                {
-                    closest_rat = rat;
-                    closest_distance = Utils.distance(piper, rat);
-                }
+    /* Returns true if the piper is close to home */
+    public Boolean piper_close_to_home(Point our_piper) {
 
-            }
-        }
-        // return closest_rat;
-        return null;
-    }
-
-
-    public Boolean piper_close_to_home(Point our_piper)
-    {
         // Current value for near_gate = side/6 | Set in init();
-        // System.out.println("Home base : " + our_gate.x + " | " + our_gate.y + " | Near gate : "+ near_gate.x + " | "+ near_gate.y);
-        if (id == 0 || id == 2)
-        { //Only consider y axis boundaries
-            if ((Math.min(our_gate.y, near_gate.y) < our_piper.y) && (our_piper.y < Math.max(our_gate.y, near_gate.y)))
-            {
+        if (id == 0 || id == 2) { 
+            //Only consider y axis boundaries
+            if ((Math.min(our_gate.y, near_gate.y) < our_piper.y) 
+                && (our_piper.y < Math.max(our_gate.y, near_gate.y))) {
                 //Piper is now close to home
                 return Boolean.TRUE;
             }
         }
-        else
-        {
+        else {
             //Only consider x axis boundaries
-            if ((Math.min(our_gate.x, near_gate.x) < our_piper.x) && (our_piper.x < Math.max(our_gate.x, near_gate.x)))
-            {
+            if ((Math.min(our_gate.x, near_gate.x) < our_piper.x) 
+                && (our_piper.x < Math.max(our_gate.x, near_gate.x))) {
                 //Piper is now close to home
                 return Boolean.TRUE;
             }
@@ -109,49 +70,7 @@ public class Player implements pppp.sim.Player {
         return Boolean.FALSE;
     }
 
-
-    double getSweepRadius(Point[] rats, Point[] boundaries, int id){
-        double radius = side/3;
-        int sum_strip1 = 0;
-        int sum_strip2 = 0;
-        int sum_rem = 0;
-        double avg = 0.0;
-
-        for(Point rat: rats)
-        {
-            if (id == 0 || id == 2)
-            {
-                //Only consider y axis boundaries
-                if ((rat.y >= Math.min(boundaries[0].y, boundaries[1].y)) && ((rat.y < Math.max(boundaries[0].y, boundaries[1].y))))
-                    {sum_strip1 += 1;}
-                else if ((rat.y >= Math.min(boundaries[1].y, boundaries[2].y)) && ((rat.y < Math.max(boundaries[1].y, boundaries[2].y))))
-                    {sum_strip2 += 1;}
-                else
-                    {sum_rem += 1;}               
-            }
-            else if (id == 1 || id == 3)
-            {
-                // id = 1 or 3 | Considering X-axis only
-                if ((rat.x > Math.min(boundaries[0].x, boundaries[1].x)) && ((rat.x < Math.max(boundaries[0].x, boundaries[1].x))))
-                    {sum_strip1 += 1;}  
-                else if ((rat.x > Math.min(boundaries[1].x, boundaries[2].x)) && ((rat.x < Math.max(boundaries[1].x, boundaries[2].x))))
-                    {sum_strip2 += 1;}
-                else
-                    {sum_rem += 1;  }     
-            } 
-        }
-        avg = (sum_strip1 + sum_strip2+ sum_rem)/2;
-        if (sum_strip2 > avg )
-        {
-            radius = side/2.5;
-        }
-        else if (sum_strip1 >avg) {
-            radius = side/4;
-        }
-        // System.out.println("Total rats : "+rats.length+ " | strip 1 : "+ sum_strip1 + " | strip 2 : "+ sum_strip2 + " | remaining "+ sum_rem + " | RADIUSLinkedFolder : "+radius);
-        return radius;
-    }
-
+    /* Returns the fixed 6 points where we send all pipers proportionally */
     public Point[] get_sweep_coordinates(int side)
     {
         Point[] sweep_coord = new Point[6];
@@ -165,6 +84,7 @@ public class Player implements pppp.sim.Player {
         return sweep_coord;
     }
 
+    /* Returns the fixed 4 points where all our pipers meet */
     public Point[] get_sweep_return_coordinates(int side)
     {
         Point[] sweep_coord = new Point[4];
@@ -178,168 +98,128 @@ public class Player implements pppp.sim.Player {
     // specify location that the player will alternate between
     public void init(int id, int side, long turns,
                      Point[][] pipers, Point[] rats) {
-        try {
-            this.id = id;
-            this.side = side;
-            int n_pipers = pipers[id].length;
-            pos = new Point[n_pipers][9];
-            random_pos = new Point[n_pipers];
-            pos_index = new int[n_pipers];
-            completed_sweep = new Boolean[n_pipers];
-            Arrays.fill(completed_sweep, Boolean.FALSE);
-            isBoundaryRat = new Boolean[n_pipers];
-            Arrays.fill(isBoundaryRat, Boolean.FALSE);
+        this.id = id;
+        this.side = side;
+        int n_pipers = pipers[id].length;
+        pos = new Point[n_pipers][9];
+        random_pos = new Point[n_pipers];
+        pos_index = new int[n_pipers];
 
-            this.grid = create_grid(side, rats.length);
-            boolean neg_y = id == 2 || id == 3;
-            boolean swap = id == 1 || id == 3;
+        completed_sweep = new Boolean[n_pipers];
+        Arrays.fill(completed_sweep, Boolean.FALSE);
+
+        isBoundaryRat = new Boolean[n_pipers];
+        Arrays.fill(isBoundaryRat, Boolean.FALSE);
+
+        boolean neg_y = id == 2 || id == 3;
+        boolean swap = id == 1 || id == 3;
+
+        // pick coordinate based on where the player is
+        our_gate = point(0.0, side * 0.5 * 1, neg_y, swap);
+        near_gate = point(0.0, side/6, neg_y, swap);
+
+        this.grid = create_grid(side, rats.length);
+        update_grid_weights(rats, pipers, our_gate);
+        Arrays.sort(this.grid, Collections.reverseOrder());
+        piper_to_cell = get_piper_to_cell(pipers);
+        for (int p=0; p < pipers[id].length; p++) {
+            random_pos[p] = piper_to_cell.get(p);
+        }
+        
+        //Sets boundaries to get 'dynamic' sweep radius
+        Point[] boundaries = new Point[3];
+        boundaries[0] = point(side * 0.5 * 1, side * 0.5 * 1, neg_y, swap); // At the door
+        boundaries[1] = point(side * 0.5 * 0.5, side * 0.5 * 0.5, neg_y, swap); // Between door and center
+        boundaries[2] = point(0, 0, neg_y, swap); // At the center of the grid
+
+        // New box_boundaries based on gate_no for piper to change path slightly to pick up rats near its gate
+        box_boundaries[0] = point(side * 0.5 * -0.5, side * 0.5 * 0.75, neg_y, swap);
+        box_boundaries[1] = point(side * 0.5 * 0.5, side * 0.5, neg_y, swap);
+        
+        if (Utils.isSparse(rats.length, side, (50/(side * side)))) {
+            // sparse_flag is for sweeping. 
+            sparse_flag = true;
+        }
+
+        Point[] all_points = new Point[6];
+        Point[] all_return_points = new Point[4];
+
+        all_points = get_sweep_coordinates(side);
+        all_return_points = get_sweep_return_coordinates(side);
+
+        int sum_of_together_pipers = pipers[id].length - 1;
+        int max_id = sum_of_together_pipers/2;
+
+        int[] assignment = new int[n_pipers];
+
+        for (int p = 0; p != n_pipers; ++p) {
+
+            int fake_p = 0;
+            if (p >= max_id ) {
+                fake_p = sum_of_together_pipers - p;
+                assignment[p] = assignment[fake_p];
+            }
+            else {
+                assignment[p] = p % 6;
+            }
+
+            if (fake_p < 0) 
+                fake_p = 0;
+
+            double door = 0.0;
+            if (n_pipers != 1) door = p * 1.8 / (n_pipers - 1) - 0.9;
 
             // pick coordinate based on where the player is
-            our_gate = point(0.0, side * 0.5 * 1, neg_y, swap);
-            near_gate = point(0.0, side/6, neg_y, swap);
-            update_grid_weights(rats, pipers, our_gate);
-
-            // sort the cells in the Cell[] grid in descending order of weight/number_of_rats
-            Arrays.sort(this.grid, Collections.reverseOrder());
-            piper_to_cell = get_piper_to_cell(pipers);
-            for (int p=0; p<pipers[id].length; p++) {
-                random_pos[p] = piper_to_cell.get(p);
-            }
+            Point before_gate = point(door, side * 0.5 * .85, neg_y, swap);
+            Point inside_gate = point(door, side * 0.5 * 1.2, neg_y, swap);// first and third position is at the door
+            double theta = Math.toRadians(p * 90.0 / (n_pipers - 1) + 45);
             
-            //Sets boundaries to get 'dynamic' sweep radius
-            Point[] boundaries = new Point[3];
-            boundaries[0] = point(side * 0.5 * 1, side * 0.5 * 1, neg_y, swap); // At the door
-            boundaries[1] = point(side * 0.5 * 0.5, side * 0.5 * 0.5, neg_y, swap); // Between door and center
-            boundaries[2] = point(0, 0, neg_y, swap); // At the center of the grid
-            double distance = getSweepRadius(rats, boundaries, id);
+            pos[p][0] = point(0, side * 0.5, neg_y, swap);
 
-            // New box_boundaries based on gate_no for piper to change path slightly to pick up rats near its gate
-            box_boundaries[0] = point(side * 0.5 * -0.5, side * 0.5 * 0.75, neg_y, swap);
-            box_boundaries[1] = point(side * 0.5 * 0.5, side * 0.5, neg_y, swap);
-            
-            
-            if (isSparse(rats.length, side, (50/(side * side)))){
-                // sparse_flag is for sweeping. 
-                System.out.println("sparse_flag for sweep is : " + sparse_flag);
-                sparse_flag = true;
-            }
+            // go to sweep coordinates as per your assignment
+            pos[p][1] = (n_pipers==1 ? null: point(all_points[assignment[p]].x, all_points[assignment[p]].y, neg_y, swap));
 
-            Point[] all_points = new Point[6];
-            Point[] all_return_points = new Point[4];
+            // meet at sweep-return coordinates as per the following assignment
+            if ( (p % 6) == 0 ) 
+                pos[p][2] = all_return_points[0];
+            else if ( (p % 6) == 1 ) 
+                pos[p][2] = all_return_points[1];
+            else if ( (p % 6) == 2 || (p % 6) == 4 ) 
+                pos[p][2] = all_return_points[2];
+            else if ( (p % 6) == 3 || (p % 6) == 5 ) 
+                pos[p][2] = all_return_points[3];
 
-            all_points = get_sweep_coordinates(side);
-            all_return_points = get_sweep_return_coordinates(side);
+            pos[p][3] = before_gate;
+            pos[p][4] = inside_gate;
+            pos[p][5] = before_gate;
+            pos[p][6] = null;
 
-            // all_points[0] = new Point(- 0.9, side * 0.5 * .5);
-            // all_points[1] = new Point(- 0.9 - 5, side * 0.5 * .5);
-            // all_points[2] = new Point(- 0.9 - 10, side * 0.5 * .5);
-            // all_points[3] = new Point(- 0.9 + 5, side * 0.5 * .5);
-            // all_points[4] = new Point(- 0.9 + 10, side * 0.5 * .5);
-            // all_points[5] = new Point(- 0.9 + 15, side * 0.5 * .5);
+            // eight and ninth positions are outside the rat moving area
+            pos[p][7] = before_gate;
+            pos[p][8] = inside_gate;
 
-            int[] pipers_needed_all_points = new int[6];
-            for(int i=0; i<6; i++) {
-                pipers_needed_all_points[i] = pipers[id].length/6;
-            }
-            int pipers_left = pipers[id].length % 6;
-            int i=0;
-            while(pipers_left !=0) {
-                pipers_needed_all_points[i] += 1;
-                i++;
-                pipers_left--;
-            }
-
-            int sum_of_together_pipers = pipers[id].length - 1;
-            int max_id = sum_of_together_pipers/2;
-
-            int[] assignment = new int[n_pipers];
-
-            for (int p = 0; p != n_pipers; ++p) {
-
-                
-                int fake_p = 0;
-
-                if (p >= max_id ) {
-                    fake_p = sum_of_together_pipers - p;
-                    assignment[p] = assignment[fake_p];
-                }
-                else
-                {
-                    // fake_p = p;
-                    // for (int j=0; j<6; j++) {
-                    //     if (pipers_needed_all_points[j] !=0) {
-                    //         assignment[p] = j;
-                    //         pipers_needed_all_points[j] -= 1;
-                    //         break;
-                    //     }
-                    // }
-                    assignment[p] = p % 6;
-                }
-
-                if (fake_p < 0) 
-                    fake_p = 0;
-
-
-                double door = 0.0;
-                if (n_pipers != 1) door = p * 1.8 / (n_pipers - 1) - 0.9;
-
-                // pick coordinate based on where the player is
-                Point before_gate = point(door, side * 0.5 * .85, neg_y, swap);
-                Point inside_gate = point(door, side * 0.5 * 1.2, neg_y, swap);// first and third position is at the door
-                double theta = Math.toRadians(p * 90.0 / (n_pipers - 1) + 45);
-                // pos[p][0] = point(door, side * 0.5, neg_y, swap);
-                pos[p][0] = point(0, side * 0.5, neg_y, swap);
-                // pos[p][1] = (n_pipers==1 ? null: point(distance * Math.cos(theta), (side/2) + (-1) * distance * Math.sin(theta), neg_y, swap));
-                pos[p][1] = (n_pipers==1 ? null: point(all_points[assignment[p]].x, all_points[assignment[p]].y, neg_y, swap));
-
-                if ( (p % 6) == 0 ) 
-                    pos[p][2] = all_return_points[0];
-                else if ( (p % 6) == 1 ) 
-                    pos[p][2] = all_return_points[1];
-                else if ( (p % 6) == 2 || (p % 6) == 4 ) 
-                    pos[p][2] = all_return_points[2];
-                else if ( (p % 6) == 3 || (p % 6) == 5 ) 
-                    pos[p][2] = all_return_points[3];
-
-                pos[p][3] = before_gate;
-                pos[p][4] = inside_gate;
-                pos[p][5] = before_gate;
-                pos[p][6] = null;
-
-                // seventh and eighth positions are outside the rat moving area
-                pos[p][7] = before_gate;
-                pos[p][8] = inside_gate;
-
-                // start with first position
-                pos_index[p] = 0;
-                dst_no = 0;
-            }   
-
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+            // start with first position
+            pos_index[p] = 0;
+            dst_no = 0;
         }
     }
 
-    public Cell[] create_grid(int side, int number_of_rats) {
     /*
      Returns a Cell[] array of length = number of cells = side/20 * side/20
-     */
+    */
+    public Cell[] create_grid(int side, int number_of_rats) {
+    
         int cell_side;
 
-        if(isSparse(number_of_rats, side, (5/(side*side)))) {
-
+        if(Utils.isSparse(number_of_rats, side, (5/(side*side)))) {
             cell_side = 5;
         }
         else {
             cell_side = side/5;
         }
 
-        System.out.println("cell_side" + cell_side);
         int dim = 0;
         dim = side/cell_side;
-        // if (side % cell_side == 0)
-        //     dim = side/cell_side;
         float half = side/2;
         Cell[] grid = new Cell[dim*dim];
         
@@ -360,30 +240,9 @@ public class Player implements pppp.sim.Player {
         return grid;
     }
     
-    public void display_grid(Cell[] grid) {
-        try{
-            int x = grid.length;
-            double dimD = Math.sqrt(x);
-            int dim = (int) dimD;
-            int k = -1;
-            for (int i=0; i < dim; i++) {
-                for (int j = 0; j < dim; j++) {
-                    k = k+1;
-                    System.out.print(grid[k].weight + " ");
-                }
-                System.out.println();
-            }
-            System.out.println();
-        }
-
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-    }
-    
+    /* Returns the Cell to which a rat belongs */
     public Cell find_cell(Point rat) {
-        for (int i=0; i<this.grid.length; i++) {
+        for (int i=0; i < this.grid.length; i++) {
             Cell cell = this.grid[i];
             double x1 = cell.center.x - cell.side/2;
             double x2 = cell.center.x + cell.side/2;
@@ -397,23 +256,27 @@ public class Player implements pppp.sim.Player {
         return null;
     }
 
+    /* Returns 1, if the rat is uncaptured.
+               2, if the rats is captured by an opponent
+               3, if the rat is captured by a team member */
     public int isAvailableRat(Point rat, Point[][] pipers){
-        for (int i=0; i<4; i++){ 
-            for(int j=0; j<pipers[i].length; j++){
-                if (Utils.distance(pipers[i][j], rat) <= 10){
+        for (int i=0; i<4; i++) { 
+            for(int j=0; j<pipers[i].length; j++) {
+                if (Utils.distance(pipers[i][j], rat) <= 10) {
                     if (i == id) 
-                        return 3; 
                         // status 3 means not available and with teammate
+                        return 3; 
                     else 
-                        return 2;
                         // status 2 means not available and with opponent
+                        return 2;
                 }
             }
         }
-        return 1;
         // status 1 means rat is available & not with team mate or opponent
+        return 1;
     }
     
+    /* Updates grid weights based on various factors. See below for details. */
     public void update_grid_weights(Point[] rats, Point[][] pipers, Point our_gate) {
             for (int i=0; i < this.grid.length; i++) {
                 this.grid[i].weight = 0;
@@ -423,38 +286,29 @@ public class Player implements pppp.sim.Player {
             for (Point rat: rats) {
                 Cell cell = find_cell(rat);
                 if (cell != null) {
+                    // each rat adds a weight of 10 to it's cell
                     cell.weight = cell.weight + 10;
 
-                   int status = isAvailableRat(rat, pipers);
-                   if (status == 1){
-                       // status 1 means rat is available!! Favor available rats
-                       // if (Utils.distance(rat, our_gate) <= 0.6*side && Utils.distance(rat, our_gate) > side/10){
-                           cell.weight = cell.weight + 2;
-                       }
-                    // else {
-    //                    //     cell.weight = cell.weight + 6;
-    //                    // }      
-    //                    cell.weight = cell.weight + 3;                      
-    //                }
-                   // else if (status == 2 )  
-                       // status 2 means not available and with opponent
-                       // cell.weight = cell.weight - 2;
-    ////                else
-    ////                    // status 3 means not available and with teammate
-    ////                    cell.weight = cell.weight + 0;
-    //
-    //                for (Point piper: our_pipers) {
-                       if (Utils.distance(our_gate, rat) <= side/2 && Utils.distance(rat, our_gate) > side/10)
-                           cell.weight = cell.weight + 1;
-
-                       if (Utils.distance(rat, our_gate) < 12) 
-                            cell.weight = cell.weight - 10;
-    // //                }
+                    int status = isAvailableRat(rat, pipers);
+                    if (status == 1) {
+                        //rat is available
+                        cell.weight = cell.weight + 2;
+                    }
+                    if (Utils.distance(our_gate, rat) <= side/2 && Utils.distance(rat, our_gate) > side/10) {
+                        // rat is within our half of the grid, but not too close to the gate
+                        cell.weight = cell.weight + 1;
+                    }
+                    if (Utils.distance(rat, our_gate) < 12) {
+                        // cell is too close to the gate
+                        cell.weight = cell.weight - 10;
+                    }
                 }
 
             }
         }
     
+    /* Returns piper to cell assignment based on grid weights */
+
     public Map<Integer, Point> get_piper_to_cell(Point[][] pipers ) {
         Cell[] grid_copy = Arrays.copyOf(grid, grid.length);
         Map<Point, Integer> n_pipers_needed = new HashMap<Point, Integer>();
@@ -605,150 +459,82 @@ public class Player implements pppp.sim.Player {
          
         return piper_to_cell; 
     }
-    public void print_map(Map<Integer, Point> piper_to_cell) {
-        System.out.println("====");
-        for (Map.Entry<Integer, Point> entry : piper_to_cell.entrySet()) {
-            System.out.println(entry.getKey()+" : "+entry.getValue().toString());
-        }
-    }
-
-    // Yields the number of rats within range
-    static int num_captured_rats(Point piper, Point[] rats) {
-        int num = 0;
-        for (Point rat : rats)
-            num += Utils.distance(piper, rat) <= 10 ? 1 : 0;
-        return num;
-    }
-
-    public boolean isSparse(double ratsLength, double side, double density_threshold) {
-        double density = ratsLength / (side * side);
-        System.out.println("density: " + density);
-        System.out.println("density_threshold" + density_threshold);
-        if (density <= density_threshold) {
-            System.out.println("it's Sparse");
-            return true;
-        }
-        else {
-            System.out.println("it's Dense");
-            return false;
-        }
-    }
 
     // return next locations on last argument
     public void play(Point[][] pipers, boolean[][] pipers_played,
                      Point[] rats, Move[] moves) {
-        
-        try {
-            // if (tick % (side * 2 * 0.6) == 0) {
-            System.out.println("\n\n");
-        
-            tick++;
-            // System.out.println("Play() called!");
+        grid = create_grid(side, rats.length);
+        update_grid_weights(rats, pipers, our_gate);
+        Arrays.sort(this.grid, Collections.reverseOrder());
+        piper_to_cell = get_piper_to_cell(pipers);
 
-            grid = create_grid(side, rats.length);
+        for (int p = 0; p != pipers[id].length; ++p) {
 
-            update_grid_weights(rats, pipers, our_gate);
-            // sort the cells in the Cell[] grid in descending order of weight/number_of_rats
-            Arrays.sort(this.grid, Collections.reverseOrder());
-            piper_to_cell = get_piper_to_cell(pipers);
+            Point src = pipers[id][p];
+            Point dst = pos[p][pos_index[p]];
 
-
-
-            for (int p = 0; p != pipers[id].length; ++p) {
-
-                Point src = pipers[id][p];
-                Point dst = pos[p][pos_index[p]];
-                System.out.println("Piper id: " + p + ", position index: " + pos_index[p]);
-
-                if ((sparse_flag || ((!sparse_flag) && completed_sweep[p])) && (pos_index[p] == 1 ))
-                {
-                    pos_index[p] = 5;
-                }
-
-                if (dst == null) {
-                    dst = random_pos[p];
-                }
-
-                //if nothing on DST then rest ?
-                // if(pos_index[p] == 5 && getRatsCountOnDst( rats,   dst, 10)==0 ){
-                //  System.out.println("NOTHING at destination" + dst.x + " | " + dst.y);
-                // }
-                // if position is reached
-                // if ((Math.abs(src.x - dst.x) < 0.000001 &&
-                //     Math.abs(src.y - dst.y) < 0.000001))
-                if ((Math.abs(src.x - dst.x) < 0.000001 &&
-                    Math.abs(src.y - dst.y) < 0.000001) || (pos_index[p] == 6 && getRatsCountOnDst( rats,   dst, 10)==0 )) 
-                {
-                    // System.out.println("Reached position : "+dst.x + " | " + dst.y);
-                    // discard random position
-                    if (dst == random_pos[p]) random_pos[p] = null;
-                    // get next position
-                    if (++pos_index[p] == pos[p].length){
-                        pos_index[p] = 0;
-                        completed_sweep[p] = true;
-                        // isBoundaryRat[p] = Boolean.FALSE;
-                    }
-                    dst = pos[p][pos_index[p]];
-                    // generate a new position if random
-                    if (dst == null || pos_index[p] == 6) {
-                        // System.out.println("Assigned new dst from map");
-                        random_pos[p] = dst = piper_to_cell.get(p);
-                    }
-                }
-
-                if ((pos_index[p] == 7 ) && (num_captured_rats(pipers[id][p], rats) == 0)) {
-
-                    pos_index[p] = 6;
-                    // grid = create_grid(side, rats.length);
-                    // update_grid_weights(rats, pipers, our_gate);
-                    // // sort the cells in the Cell[] grid in descending order of weight/number_of_rats
-                    // Arrays.sort(this.grid, Collections.reverseOrder());
-                    // piper_to_cell = get_piper_to_cell(pipers);
-                }
-                if ((pos_index[p] == 7) && (num_captured_rats(pipers[id][p], rats) >= 1) && (get_closest_rat(rats, box_boundaries, pipers[id][p]) != null) && (!isBoundaryRat[p]) && (piper_close_to_home(pipers[id][p])))
-                {      
-                //     System.out.println("close to home setting destination at boundary !!!! " + pipers[id][p].x + " | "+ pipers[id][p].y);
-                //     System.out.println("Home base : " + our_gate.x + " | " + our_gate.y + " | Near gate : "+ near_gate.x + " | "+ near_gate.y);  
-                    pos_index[p] = 6;
-                    random_pos[p] = dst = get_closest_rat(rats, box_boundaries, pipers[id][p]);
-                    // System.out.println("----------> New destination : "+dst.x + " | " + dst.y);
-                    isBoundaryRat[p] = Boolean.TRUE;
-                }
-
-                if ((pos_index[p] == 4 || pos_index[p] == 8) && num_captured_rats(pipers[id][p], rats) == 0)
-                    pos_index[p] = 5;
-                if ((pos_index[p] == 6 )/* && (!isBoundaryRat[p])*/){
-                    // just got free to do something
-                    // reassign piper to null destination first - no longer assigned to previous cell 
-                    // (because we're using non-null values in this map to compute set of unassigned pipers)
-                    // System.out.println("setting to null in map, but dst is still " + dst.x + ", " + dst.y);
-                    piper_to_cell.put(p, null);
-
-                    // update grid now
-                    grid = create_grid(side, rats.length);
-                    update_grid_weights(rats, pipers, our_gate);
-                    // sort the cells in the Cell[] grid in descending order of weight/number_of_rats
-                    Arrays.sort(this.grid, Collections.reverseOrder());
-                    piper_to_cell = get_piper_to_cell(pipers);
-                    if (random_pos[p] == null)
-                        random_pos[p] = dst = piper_to_cell.get(p);
-                }
-
-                // get move towards position
-                moves[p] = move(src, dst, (pos_index[p] > 1 && pos_index[p] < 5) || (pos_index[p] > 6) || (isBoundaryRat[p] && (num_captured_rats(pipers[id][p], rats) >= 1)));
-                // System.out.println("Piper to cell map:");
-                // for (Map.Entry<Integer, Point> entry: piper_to_cell.entrySet()) {
-                //     if (entry.getValue() != null)
-                //         System.out.println(entry.getKey() + " : (" + entry.getValue().x + ", " + entry.getValue().y + ")");
-                //     else
-                //         System.out.println(entry.getKey() + " : null");
-                // }
+            if ((sparse_flag || ((!sparse_flag) && completed_sweep[p])) && (pos_index[p] == 1 )) {
+                pos_index[p] = 5;
             }
-            display_grid(grid);
+
+            if (dst == null) {
+                dst = random_pos[p];
+            }
+
+            if ((Math.abs(src.x - dst.x) < 0.000001 &&
+                Math.abs(src.y - dst.y) < 0.000001) || (pos_index[p] == 6 && Utils.getRatsCountOnDst( rats,   dst, 10)==0 )) 
+            {
+                // discard random position
+                if (dst == random_pos[p]) random_pos[p] = null;
+                // get next position
+                if (++pos_index[p] == pos[p].length){
+                    pos_index[p] = 0;
+                    completed_sweep[p] = true;
+                }
+                dst = pos[p][pos_index[p]];
+
+                // generate a new position if random
+                if (dst == null || pos_index[p] == 6) {
+                    random_pos[p] = dst = piper_to_cell.get(p);
+                }
+            }
+
+            if ((pos_index[p] == 7 ) && (Utils.num_captured_rats(pipers[id][p], rats) == 0)) {
+                pos_index[p] = 6;
+            }
+            if ((pos_index[p] == 7) 
+                && (Utils.num_captured_rats(pipers[id][p], rats) >= 1) 
+                && (Utils.get_closest_rat(rats, box_boundaries, pipers[id][p]) != null) 
+                && (!isBoundaryRat[p]) && (piper_close_to_home(pipers[id][p])))
+            {      
+                pos_index[p] = 6;
+                random_pos[p] = dst = Utils.get_closest_rat(rats, box_boundaries, pipers[id][p]);
+                isBoundaryRat[p] = Boolean.TRUE;
+            }
+
+            if ((pos_index[p] == 4 || pos_index[p] == 8) && Utils.num_captured_rats(pipers[id][p], rats) == 0)
+                pos_index[p] = 5;
+            if ((pos_index[p] == 6 ) && (!isBoundaryRat[p])){
+                // just got free to do something
+                // reassign piper to null destination first - no longer assigned to previous cell 
+                // (because we're using non-null values in this map to compute set of unassigned pipers)
+                piper_to_cell.put(p, null);
+
+                // update grid now
+                grid = create_grid(side, rats.length);
+                update_grid_weights(rats, pipers, our_gate);
+                Arrays.sort(this.grid, Collections.reverseOrder());
+                piper_to_cell = get_piper_to_cell(pipers);
+
+                if (random_pos[p] == null)
+                    random_pos[p] = dst = piper_to_cell.get(p);
+            }
+
+            // get move towards position
+            boolean play = (pos_index[p] > 1 && pos_index[p] < 5) || (pos_index[p] > 6) || (isBoundaryRat[p] && (Utils.num_captured_rats(pipers[id][p], rats) >= 1));
+            moves[p] = move(src, dst, play);
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        
         
     }
 }
