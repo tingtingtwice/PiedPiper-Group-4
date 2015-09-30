@@ -155,15 +155,25 @@ public class Player implements pppp.sim.Player {
     public Point[] get_sweep_coordinates(int side)
     {
         Point[] sweep_coord = new Point[6];
-        sweep_coord[0] = new Point(side * -0.5 * 0.5, side * 0.5 * 0.4);
-        sweep_coord[1] = new Point(side * 0.5 * 0.5, side * 0.5 * 0.4);
-        sweep_coord[2] = new Point(side * -0.5 * 0.9, side * 0.5 * 0.8);
-        sweep_coord[3] = new Point(side * -0.5 * 0.9, side * 0.5 * 0.4);
-        sweep_coord[4] = new Point(side * 0.5 * 0.9, side * 0.5 * 0.8);
-        sweep_coord[5] = new Point(side * 0.5 * 0.9, side * 0.5 * 0.4);
+
+        sweep_coord[0] = new Point(side * -0.5 * 0.5, side * 0.5 * 0.35);
+        sweep_coord[1] = new Point(side * 0.5 * 0.5, side * 0.5 * 0.35);
+        sweep_coord[2] = new Point(side * -0.5 * 0.8, side * 0.5 * 0.9);
+        sweep_coord[3] = new Point(side * -0.5 * 0.8, side * 0.5 * 0.3);
+        sweep_coord[4] = new Point(side * 0.5 * 0.8, side * 0.5 * 0.9);
+        sweep_coord[5] = new Point(side * 0.5 * 0.8, side * 0.5 * 0.3);
         return sweep_coord;
     }
 
+    public Point[] get_sweep_return_coordinates(int side)
+    {
+        Point[] sweep_coord = new Point[4];
+        sweep_coord[0] = new Point(side * -0.5 * 0.5, side * 0.5 * 0.6);
+        sweep_coord[1] = new Point(side * 0.5 * 0.5, side * 0.5 * 0.6);
+        sweep_coord[2] = new Point(side * -0.5 * 0.6, side * 0.5 * 0.6);
+        sweep_coord[3] = new Point(side * 0.5 * 0.6, side * 0.5 * 0.6);
+        return sweep_coord;
+    }
 
     // specify location that the player will alternate between
     public void init(int id, int side, long turns,
@@ -172,7 +182,7 @@ public class Player implements pppp.sim.Player {
             this.id = id;
             this.side = side;
             int n_pipers = pipers[id].length;
-            pos = new Point[n_pipers][8];
+            pos = new Point[n_pipers][9];
             random_pos = new Point[n_pipers];
             pos_index = new int[n_pipers];
             completed_sweep = new Boolean[n_pipers];
@@ -215,8 +225,11 @@ public class Player implements pppp.sim.Player {
             }
 
             Point[] all_points = new Point[6];
+            Point[] all_return_points = new Point[4];
 
             all_points = get_sweep_coordinates(side);
+            all_return_points = get_sweep_return_coordinates(side);
+
             // all_points[0] = new Point(- 0.9, side * 0.5 * .5);
             // all_points[1] = new Point(- 0.9 - 5, side * 0.5 * .5);
             // all_points[2] = new Point(- 0.9 - 10, side * 0.5 * .5);
@@ -241,16 +254,23 @@ public class Player implements pppp.sim.Player {
                 // pos[p][1] = (n_pipers==1 ? null: point(distance * Math.cos(theta), (side/2) + (-1) * distance * Math.sin(theta), neg_y, swap));
                 pos[p][1] = (n_pipers==1 ? null: point(all_points[assignment[p]].x, all_points[assignment[p]].y, neg_y, swap));
 
-                // if ( (p % 6) == 0 || (p % 6) == 1 ) 
-                //     pos[p][2] = 
-                pos[p][2] = before_gate;
-                pos[p][3] = inside_gate;
-                pos[p][4] = before_gate;
-                pos[p][5] = null;
+                if ( (p % 6) == 0 ) 
+                    pos[p][2] = all_return_points[0];
+                else if ( (p % 6) == 1 ) 
+                    pos[p][2] = all_return_points[1];
+                else if ( (p % 6) == 2 || (p % 6) == 3 ) 
+                    pos[p][2] = all_return_points[2];
+                else if ( (p % 6) == 4 || (p % 6) == 5 ) 
+                    pos[p][2] = all_return_points[3];
+
+                pos[p][3] = before_gate;
+                pos[p][4] = inside_gate;
+                pos[p][5] = before_gate;
+                pos[p][6] = null;
 
                 // seventh and eighth positions are outside the rat moving area
-                pos[p][6] = before_gate;
-                pos[p][7] = inside_gate;
+                pos[p][7] = before_gate;
+                pos[p][8] = inside_gate;
 
                 // start with first position
                 pos_index[p] = 0;
@@ -601,7 +621,7 @@ public class Player implements pppp.sim.Player {
 
                 if ((sparse_flag || ((!sparse_flag) && completed_sweep[p])) && (pos_index[p] == 1 ))
                 {
-                    pos_index[p] = 4;
+                    pos_index[p] = 5;
                 }
 
                 if (dst == null) {
@@ -629,15 +649,15 @@ public class Player implements pppp.sim.Player {
                     }
                     dst = pos[p][pos_index[p]];
                     // generate a new position if random
-                    if (dst == null || pos_index[p] == 5) {
+                    if (dst == null || pos_index[p] == 6) {
                         // System.out.println("Assigned new dst from map");
                         random_pos[p] = dst = piper_to_cell.get(p);
                     }
                 }
 
-                if ((pos_index[p] == 6 ) && (num_captured_rats(pipers[id][p], rats) == 0)) {
+                if ((pos_index[p] == 7 ) && (num_captured_rats(pipers[id][p], rats) == 0)) {
 
-                    pos_index[p] = 5;
+                    pos_index[p] = 6;
                     // grid = create_grid(side, rats.length);
                     // update_grid_weights(rats, pipers, our_gate);
                     // // sort the cells in the Cell[] grid in descending order of weight/number_of_rats
@@ -654,9 +674,9 @@ public class Player implements pppp.sim.Player {
                     // isBoundaryRat[p] = Boolean.TRUE;
                 // }
 
-                if ((pos_index[p] == 3 || pos_index[p] == 7) && num_captured_rats(pipers[id][p], rats) == 0)
-                    pos_index[p] = 4;
-                if ((pos_index[p] == 5 )/* && (!isBoundaryRat[p])*/){
+                if ((pos_index[p] == 4 || pos_index[p] == 8) && num_captured_rats(pipers[id][p], rats) == 0)
+                    pos_index[p] = 5;
+                if ((pos_index[p] == 6 )/* && (!isBoundaryRat[p])*/){
                     // just got free to do something
                     // reassign piper to null destination first - no longer assigned to previous cell 
                     // (because we're using non-null values in this map to compute set of unassigned pipers)
@@ -674,7 +694,7 @@ public class Player implements pppp.sim.Player {
                 }
 
                 // get move towards position
-                moves[p] = move(src, dst, (pos_index[p] > 1 && pos_index[p] < 4) || (pos_index[p] > 5) /*|| (isBoundaryRat[p])*/);
+                moves[p] = move(src, dst, (pos_index[p] > 1 && pos_index[p] < 5) || (pos_index[p] > 6) /*|| (isBoundaryRat[p])*/);
                 // System.out.println("Piper to cell map:");
                 // for (Map.Entry<Integer, Point> entry: piper_to_cell.entrySet()) {
                 //     if (entry.getValue() != null)
