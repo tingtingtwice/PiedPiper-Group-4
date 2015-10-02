@@ -137,7 +137,7 @@ class Simulator {
 						System.err.println("Group " + groups[g] + " threw exception on constructor: " + e.getMessage());
 					else
 						System.err.println("Group " + groups[g] + " threw exception on init(): " + e.getMessage());
-					System.exit(1);
+					//System.exit(1);
 				}
 				players[g] = null;
 			}
@@ -166,7 +166,7 @@ class Simulator {
 					print(e);
 					if (exit_on_exception) {
 						System.err.println("Group " + groups[g] + " threw exception on play(): " + e.getMessage());
-						System.exit(1);
+						//System.exit(1);
 					}
 				}
 			}
@@ -566,7 +566,7 @@ class Simulator {
 		} catch (Exception e) {
 			System.err.println("Error during setup: " + e.getMessage());
 			e.printStackTrace();
-			System.exit(1);
+			//System.exit(1);
 		}
 		// print parameters
 		System.err.println("North group: " + groups[0]);
@@ -592,14 +592,14 @@ class Simulator {
 		// initialize and play
 		if (!init(n_pipers, n_rats)) {
 			System.err.println("No valid players to play game");
-			System.exit(1);
+			//System.exit(1);
 		}
 		try {
 			play(gui);
 		} catch (Exception e) {
 			System.err.println("Error during play: " + e.getMessage());
 			e.printStackTrace();
-			System.exit(1);
+			//System.exit(1);
 		}
 		// print scores
 		System.err.println("North group (" + groups[0] + ") scored: " + score[0]);

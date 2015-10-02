@@ -2,6 +2,11 @@ package pppp.sim;
 
 public class Point {
 
+	@Override
+	public String toString() {
+		return "Point [x=" + x + ", y=" + y + "]";
+	}
+
 	public final double x;
 	public final double y;
 

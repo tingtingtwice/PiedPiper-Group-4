@@ -142,7 +142,7 @@ class Challenge {
 						System.err.println("Group " + groups[g] + " threw exception on constructor: " + e.getMessage());
 					else
 						System.err.println("Group " + groups[g] + " threw exception on init(): " + e.getMessage());
-					System.exit(1);
+					//System.exit(1);
 				}
 				players[g] = null;
 			}
@@ -171,7 +171,7 @@ class Challenge {
 					print(e);
 					if (exit_on_exception) {
 						System.err.println("Group " + groups[g] + " threw exception on play(): " + e.getMessage());
-						System.exit(1);
+						//System.exit(1);
 					}
 				}
 			}
@@ -492,7 +492,7 @@ class Challenge {
 					break;
 				}
 			}
-			if (turn_limit == 0) break;
+			if (turn_limit == 0 || rats.length<=1) break;
 			// run next turn
 			if (turn > 0) {
 				println("### beg of turn " + turn + " ###");
@@ -510,10 +510,10 @@ class Challenge {
 	public static void main(String[] args)
 	{
 		//------------------
-		SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd_hhmmss"); 
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd_hhmmss"); 
 		Date challengeTime=new Date();
-		String fileName="e:\\tournament_"+ dt.format(challengeTime)+".csv";
-		ChallengeResult.writeHeaderToExcel(fileName);
+		int ourPlayer=4;
+
 		int n_pipers = 2;
 		int n_rats = 10;
 		boolean gui = false;
@@ -523,35 +523,54 @@ class Challenge {
 		direction[1] = "east";
 		direction[2] = "south";
 		direction[3] = "west";
-		gui = false;
+ 
 		verbose = false;
 		recompile = true;
 
 		try {
 			//-----------------------------------
-			int[] ratsConfig={1,10,50,100,200,500};
-			int[] pipersConfig={4,8,12,16,20};
-			int[] sidesConfig={100};
-			int side=100;
+			int[] ratsConfig={ 20, 101,500};
+			int[] pipersConfig={1,6,13};
+			int[] sidesConfig={100,200};
+	
 
+		    for(int roundsCounter=1;roundsCounter<=10;roundsCounter++){
+			String fileName="./tournament_ROUND_"+ roundsCounter +"_us_"+ ourPlayer + "__" + dt.format(challengeTime)+".csv";
+			ChallengeResult.writeHeaderToExcel(fileName);
 			for(int ratsCount : ratsConfig){
 				for(int pipersCount : pipersConfig){
 					for(int sideInfo :sidesConfig){ //--gui --rats 100 --pipers 8 --side 100 --fps 100 --groups g0 g1 g1 g1  --recompile
 					    //Start Tournament :--- 
-						int[] opponentGroups = { 1, 2, 3,  5, 6, 7, 8, 9, 1};
+						int[] opponentGroups = { 1, 2, 3,  6, 7, 8, 9,  1, 2};
+						int[] last2Elements = { 1, 2, 3,  6, 7, 8, 9};
+						//int[] opponentGroups = { 5,5,5, 5,5,5, 5,5,5};
+						Utils.shuffleArray(last2Elements);
+						opponentGroups[7]=last2Elements[0];
+						opponentGroups[8]=last2Elements[1];
 					    Utils.shuffleArray(opponentGroups);
+				
 						//--- Play Round1
-						int winner1=playRound(pipersCount, ratsCount,side, opponentGroups[0],opponentGroups[1],opponentGroups[2], recompile, gui, "Round1",fileName);
+						int winner1=playRound(pipersCount, ratsCount,sideInfo, ourPlayer,opponentGroups[0],opponentGroups[1],opponentGroups[2], recompile, gui, "Round1",fileName);
 					    //    Play Round2
-						int winner2=playRound(pipersCount, ratsCount,side,opponentGroups[3],opponentGroups[4],opponentGroups[5], recompile, gui,"Round2",fileName);
+						int winner2=playRound(pipersCount, ratsCount,sideInfo,ourPlayer,opponentGroups[3],opponentGroups[4],opponentGroups[5], recompile, gui,"Round2",fileName);
 					    //    Play Round 3
-						int winner3=playRound(pipersCount, ratsCount,side,opponentGroups[6],opponentGroups[7],opponentGroups[8], recompile, gui, "Round3",fileName);
+						int winner3=playRound(pipersCount, ratsCount,sideInfo,ourPlayer,opponentGroups[6],opponentGroups[7],opponentGroups[8], recompile, gui, "Round3",fileName);
 					    //    Play Finalle 
-						int winnerFinalle=playRound(pipersCount, ratsCount,side,winner1,winner2,winner3, false, gui,"Finalle",fileName);
+					//	int winnerFinalle=playRound(pipersCount, ratsCount,sideInfo,ourPlayer,winner1,winner2,winner3, false, gui,"Finalle",fileName);
+				    //}
+				    /*      //--- Play Round1
+							 winner1=playRound(pipersCount, ratsCount,sideInfo,ourPlayer, opponentGroups[0],opponentGroups[1],opponentGroups[2], recompile, gui, "Round1",fileName);
+						    //    Play Round2
+							 winner2=playRound(pipersCount, ratsCount,sideInfo,ourPlayer,opponentGroups[3],opponentGroups[4],opponentGroups[5], recompile, gui,"Round2",fileName);
+						    //    Play Round 3
+							 winner3=playRound(pipersCount, ratsCount,sideInfo,ourPlayer,opponentGroups[6],opponentGroups[7],opponentGroups[8], recompile, gui, "Round3",fileName);
+						    //    Play Finalle 
+						//	winnerFinalle=playRound(pipersCount, ratsCount,sideInfo,ourPlayer,winner1,winner2,winner3, false, gui,"Finalle",fileName);
+*/					    //}
 					}
 				}
 			}
-			
+		    }	
 		} catch (Exception e) {
 			System.err.println("Error during setup: " + e.getMessage());
 			e.printStackTrace();
@@ -560,8 +579,8 @@ class Challenge {
 
 	}
 
-	static int playRound(int n_pipers, int n_rats,int side, int g1,int g2,int g3, boolean recompile, boolean gui, String description, String fileName) throws Exception{
-		turn_limit = 1000000;//TODO: what to initialise here ???
+	static int playRound(int n_pipers, int n_rats,int side, int OurPlayer, int g1,int g2,int g3, boolean recompile, boolean gui, String description, String fileName) throws Exception{
+		turn_limit = 10000;//TODO: what to initialise here ???
 		if (n_pipers < 1)
 			throw new Exception("Invalid number of pipers (need at least 1)");
 
@@ -572,7 +591,7 @@ class Challenge {
 			throw new Exception("Invalid FPS (must be non-negative)");
 		refresh = fps == 0.0 ? -1 : (int) Math.round(1000.0 / fps);
 		//TODO : get players for current tournament
-		groups[0] = "g4";
+		groups[0] = "g" + OurPlayer;
 		groups[1] = "g" + g1;
 		groups[2] = "g" + g2;
 		groups[3] = "g" + g3;
@@ -612,7 +631,7 @@ class Challenge {
 		} catch (Exception e) {
 			System.err.println("Error during play: " + e.getMessage());
 			e.printStackTrace();
-			System.exit(1);
+			//System.exit(1);
 		}
 		// print scores
 		System.err.println("North group: " + groups[0]);
@@ -630,16 +649,16 @@ class Challenge {
 		System.err.println("South group (" + groups[2] + ") scored: " + score[2]);
 		System.err.println("West  group (" + groups[3] + ") scored: " + score[3]);
 		int[] scoresOf9=new int[10];
-		scoresOf9[4]=score[0];
+		scoresOf9[OurPlayer]=score[0];
 		scoresOf9[g1]=score[1];
 		scoresOf9[g2]=score[2];
 		scoresOf9[g3]=score[3];
-		WinnerInfo wi=Utils.getMaxValueAndIndex(scoresOf9);
+		WinnerInfo wi=WinnerInfo.getMaxValueAndIndex(scoresOf9);
 		Date end=new Date();
 		long diff = end.getTime() - startTime.getTime();
 		long timeTakenSeconds=diff / 1000;
  		ChallengeResult cr=new ChallengeResult(startTime, description,
- 				"g4", "g" +g1, "g"+g2,
+ 				"g" + OurPlayer, "g" +g1, "g"+g2,
  				"g"+g3,timeTakenSeconds,  "g"+wi.winnerGroupId,wi.winnerScore,
  				n_pipers, n_rats,  side, scoresOf9) ;
  		cr.writeToExcel(fileName);
