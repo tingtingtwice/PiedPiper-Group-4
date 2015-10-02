@@ -1,4 +1,4 @@
-package pppp.g0;
+package pppp.g8;
 
 public class two_tuple {
 	public int a;

@@ -18,6 +18,8 @@ public class Piper {
     public double movementX;
     public double movementY;
     public Strategy strategy;
+    public int friendlyStrength;
+    public int maxEnemyStrength;
 
     public Piper(int id, Point curLocation) {
         this.id = id;
@@ -58,7 +60,7 @@ public class Piper {
 
     public void updateLocation(Point point) {
 	if (this.prevLocation != null) {
-	    double memory = 16;
+	    double memory = 10;
 	    movementX = movementX * (memory - 1) / memory;
 	    movementY = movementY * (memory - 1) / memory;
 	    movementX += (point.x - this.prevLocation.x) / memory;
