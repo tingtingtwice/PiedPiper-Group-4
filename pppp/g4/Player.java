@@ -333,7 +333,7 @@ public class Player implements pppp.sim.Player {
         box_boundaries[0] = point(side * 0.5 * -0.5, side * 0.5 * 0.75, neg_y, swap);
         box_boundaries[1] = point(side * 0.5 * 0.5, side * 0.5, neg_y, swap);
         
-        if (Utils.isSparse(rats.length, side, (50.0/(side * side)))) {
+        if (Utils.isSparse(rats.length, side, (30.0/(side * side)))) {
             // sparse_flag is for sweeping. 
             sparse_flag = true;
         }
