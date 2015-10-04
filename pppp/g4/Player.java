@@ -177,12 +177,13 @@ public class Player implements pppp.sim.Player {
     {
         Point[] sweep_coord = new Point[6];
 
-        sweep_coord[4] = new Point(side * -0.5 * 0.5, side * 0.5 * 0.35);
-        sweep_coord[1] = new Point(side * 0.5 * 0.5, side * 0.5 * 0.35);
-        sweep_coord[2] = new Point(side * -0.5 * 0.8, side * 0.5 * 0.9);
-        sweep_coord[0] = new Point(side * -0.5 * 0.8, side * 0.5 * 0.3);
+        sweep_coord[4] = new Point(side * -0.5 * 0.5, side * 0.5 * 0.6);
+        sweep_coord[1] = new Point(side * 0.5 * 0.5, side * 0.5 * 0.6);
+        sweep_coord[5] = new Point(side * 0.5 * 0.8, side * 0.5 * 0.6);
+        sweep_coord[0] = new Point(side * -0.5 * 0.8, side * 0.5 * 0.6);
+
         sweep_coord[3] = new Point(side * 0.5 * 0.8, side * 0.5 * 0.9);
-        sweep_coord[5] = new Point(side * 0.5 * 0.8, side * 0.5 * 0.3);
+        sweep_coord[2] = new Point(side * -0.5 * 0.8, side * 0.5 * 0.9);
         return sweep_coord;
     }
 
@@ -190,10 +191,10 @@ public class Player implements pppp.sim.Player {
     public Point[] get_sweep_return_coordinates(int side)
     {
         Point[] sweep_coord = new Point[4];
-        sweep_coord[0] = new Point(side * -0.5 * 0.5, side * 0.5 * 0.6);
-        sweep_coord[1] = new Point(side * 0.5 * 0.5, side * 0.5 * 0.6);
-        sweep_coord[2] = new Point(side * -0.5 * 0.6, side * 0.5 * 0.6);
-        sweep_coord[3] = new Point(side * 0.5 * 0.6, side * 0.5 * 0.6);
+        sweep_coord[0] = new Point(side * -0.5 * 0.5, side * 0.5 * 0.45);
+        sweep_coord[1] = new Point(side * 0.5 * 0.5, side * 0.5 * 0.45);
+        sweep_coord[2] = new Point(side * -0.5 * 0.6, side * 0.5 * 0.45);
+        sweep_coord[3] = new Point(side * 0.5 * 0.6, side * 0.5 * 0.45);
         return sweep_coord;
     }
     
@@ -337,6 +338,9 @@ public class Player implements pppp.sim.Player {
             // sparse_flag is for sweeping. 
             sparse_flag = true;
         }
+        System.out.println("rats.length: " + rats.length);
+        System.out.println("side: " + side);
+        System.out.println("Sweeping is sparse flag: " + sparse_flag);
 
         Point[] all_points = new Point[6];
         Point[] all_return_points = new Point[4];
@@ -378,13 +382,13 @@ public class Player implements pppp.sim.Player {
 
             // meet at sweep-return coordinates as per the following assignment
             if ( (p % 6) == 0 ) 
-                pos[p][2] = all_return_points[0];
+                pos[p][2] = point(all_return_points[0].x, all_return_points[0].y, neg_y, swap);
             else if ( (p % 6) == 1 ) 
-                pos[p][2] = all_return_points[1];
+                pos[p][2] = point(all_return_points[1].x, all_return_points[1].y, neg_y, swap);
             else if ( (p % 6) == 2 || (p % 6) == 4 ) 
-                pos[p][2] = all_return_points[2];
+                pos[p][2] = point(all_return_points[2].x, all_return_points[2].y, neg_y, swap);
             else if ( (p % 6) == 3 || (p % 6) == 5 ) 
-                pos[p][2] = all_return_points[3];
+                pos[p][2] = point(all_return_points[3].x, all_return_points[3].y, neg_y, swap);
 
             pos[p][3] = before_gate;
             pos[p][4] = inside_gate;
