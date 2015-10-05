@@ -40,9 +40,6 @@ public class OnePiperStrategy implements pppp.g3.Strategy {
 
     public void init(int id, int side, long turns,
                      Point[][] pipers, Point[] rats){
-        gateEntrance = Movement.makePoint(DOOR, side * 0.5 - 5, neg_y, swap);
-        insideGate = Movement.makePoint(DOOR, side * 0.5 + 2.5, neg_y, swap);
-        justOutsideGate = Movement.makePoint(DOOR, side * 0.5 - 10, neg_y, swap);
 
         // storing variables
         this.id = id;
@@ -52,6 +49,10 @@ public class OnePiperStrategy implements pppp.g3.Strategy {
         // variables to rotate map
         neg_y = id == 2 || id == 3;
         swap  = id == 1 || id == 3;
+
+        gateEntrance = Movement.makePoint(DOOR, side * 0.5 - 5, neg_y, swap);
+        insideGate = Movement.makePoint(DOOR, side * 0.5 + 2.5, neg_y, swap);
+        justOutsideGate = Movement.makePoint(DOOR, side * 0.5 - 10, neg_y, swap);
 
         // create the state machines for the pipers
         numberOfPipers = pipers[id].length;
