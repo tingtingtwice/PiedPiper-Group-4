@@ -865,13 +865,14 @@ public class Player implements pppp.sim.Player {
 	            	else if(pos_index[p] ==5){
 	            		int ratsAtGap10= Utils.getRatsCountOnDstForClustered( rats, src,10);
 	            		int ratsAtGap5= Utils.getRatsCountOnDstForClustered( rats, src,2);
-	            		if( reachedFirstPoint[p]==true && ratsAtGap5 >5 &&  ((double)ratsAtGap10/(double)ratsAtGap5) >1.3 && stopCount[p]<5){
+	            		if( reachedFirstPoint[p]==true && ratsAtGap5 >5 &&  ((double)ratsAtGap10/(double)ratsAtGap5) >1.3 && stopCount[p]>0 && stopCount[p]<6){
 		            		moves[p] = move(src, src, (pos_index[p] >= 5 && reachedFirstPoint[p]));
 		            		stopCount[p]+=1;
 		            		continue;
 	            		}else{
-	            			stopCount[p]=1;
+	            			stopCount[p]=-2;
 	            		}
+	            		stopCount[p]+=1;
 	            		//boolean clusterUnknown=whichCurrentCluster[p]; 		            			&& Utils.ratsOnPath( rats , clusters.get(whichCurrentCluster[p]).getPoints(), nearbyRatScanRadius,posIndexInCurrentCluster[p])>0
 	            		if(pos[p][pos_index[p]]!=null && Utils.reachedDst(src,pos[p][pos_index[p]]) && reachedFirstPoint[p]==true){
 	            			//generate next Point and move to it
